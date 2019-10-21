@@ -1,0 +1,24 @@
+#端口号
+server:
+  port: 10010
+
+#服务注册
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10000/eureka/
+
+spring:
+  #服务名称
+  application:
+    name: study-service-config
+  #git配置
+  cloud:
+    config:
+      server:
+        git:
+          uri: https://github.com/NecroDriver/study
+          search-paths: config-repository
+          username: NecroDriver
+          password: 12241233NIDFgit
+
