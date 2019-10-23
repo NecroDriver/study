@@ -1,0 +1,29 @@
+#bootstrap.properties的加载先于application.properties
+spring:
+  cloud:
+    config:
+      #配置中心名称
+      name: work-config
+      profile: dev
+      #直接用配置中心地址
+#      uri: http://localhost:10010/
+      #标签
+      label: master
+      #从配置中心读取文件
+      discovery:
+        enabled: true
+        #配置中心的serviceId，即服务名
+        service-id: study-service-config
+#高可用集群配置
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10000/eureka/
+
+#暴露刷新地址 cmd curl -X POST http://localhost:8080/actuator/refresh
+#相关资料 https://blog.csdn.net/zzzgd_666/article/details/84322947
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
