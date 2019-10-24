@@ -1,5 +1,7 @@
 package com.xin.work.controller;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -16,6 +18,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RefreshScope
 public class TestController {
 
+    private final Logger logger = LoggerFactory.getLogger(TestController.class);
+
     @Value("${test-name}")
     private String testName;
 
@@ -27,5 +31,16 @@ public class TestController {
     @RequestMapping("/getConfig")
     public String getConfig() {
         return testName;
+    }
+
+    @RequestMapping("/testHystrix")
+    public String testHystrix(String name) {
+        logger.info(name + " 测试熔断开始。。。。");
+        try {
+            Thread.sleep(1000000);
+        } catch (Exception e) {
+            logger.error("发生异常", e.getMessage());
+        }
+        return name + ",this is a testHystrix controller";
     }
 }

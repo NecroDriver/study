@@ -9,8 +9,6 @@ server:
 
 #eureka服务地址
 eureka:
-  instance:
-    hostname: study-service-work-host
   client:
     service-url:
       defaultZone: http://localhost:10000/eureka/

@@ -1,0 +1,23 @@
+server:
+  port: 9999
+
+spring:
+  application:
+    name: study-service-zuul
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://localhost:10000/eureka/
+
+#默认情况下，Zuul会代理所有注册到Eureka Server的微服务，并且Zuul的路由规则如下：http://ZUUL_HOST:ZUUL_PORT/微服务在Eureka上的serviceId/**会被转发到serviceId对应的微服务。
+zuul:
+  routes:
+    springStudy:
+      path: springStudy
+      url: http://www.ityouknow.com/springcloud/2017/06/01/gateway-service-zuul.html
+#    work:
+#      path: /work/**
+#      serviceId: study-service-work
+  #是否开启重试功能
+  retryable: true
