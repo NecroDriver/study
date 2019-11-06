@@ -1,10 +1,10 @@
-package com.xin.jdbc;
+package com.xin.daily;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
 
 @SpringBootTest
-class BootStarterJdbcApplicationTests {
+class ServiceDailyApplicationTests {
 
     @Test
     void contextLoads() {
