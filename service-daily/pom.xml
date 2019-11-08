@@ -36,7 +36,11 @@
             <artifactId>boot-starter-jdbc</artifactId>
             <version>0.0.3-SNAPSHOT</version>
         </dependency>
-
+        <dependency>
+            <groupId>com.xin</groupId>
+            <artifactId>swagger-spring-boot-starter</artifactId>
+            <version>0.0.2-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
