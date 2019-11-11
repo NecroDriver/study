@@ -51,7 +51,7 @@ public class Swagger2Properties {
         /**
          * 维护人名
          */
-        private String name = "necroDriver";
+        private String name = "NecroDriver";
         /**
          * 维护人email
          */

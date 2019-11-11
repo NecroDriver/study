@@ -58,7 +58,7 @@ public class Swagger2AutoConfiguration extends WebMvcConfigurationSupport {
                 //文档描述
                 .description(swagger2Properties.getDescription())
                 //联系人
-                .contact(new Contact(swagger2Properties.getContact().getName(), swagger2Properties.getContact().getEmail(), swagger2Properties.getContact().getUrl()))
+                .contact(new Contact(swagger2Properties.getContact().getName(), swagger2Properties.getContact().getUrl(), swagger2Properties.getContact().getEmail()))
                 //版本号
                 .version(swagger2Properties.getVersion())
                 //更新此API的许可证信息
