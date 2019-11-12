@@ -5,13 +5,13 @@
     <parent>
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
-        <version>2.2.0.RELEASE</version>
+        <version>2.2.1.RELEASE</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
     <groupId>com.xin</groupId>
-    <artifactId>daily</artifactId>
+    <artifactId>druid</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>service-daily</name>
+    <name>druid-spring-boot-starter</name>
     <description>Study project for Spring Boot</description>
 
     <properties>
@@ -21,26 +21,9 @@
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
+            <artifactId>spring-boot-starter</artifactId>
         </dependency>
 
-        <dependency>
-            <groupId>org.projectlombok</groupId>
-            <artifactId>lombok</artifactId>
-            <optional>true</optional>
-        </dependency>
-
-        <!--    本地仓库    -->
-<!--        <dependency>-->
-<!--            <groupId>com.xin</groupId>-->
-<!--            <artifactId>boot-starter-jdbc</artifactId>-->
-<!--            <version>0.0.2-SNAPSHOT</version>-->
-<!--        </dependency>-->
-        <dependency>
-            <groupId>com.xin</groupId>
-            <artifactId>swagger-spring-boot-starter</artifactId>
-            <version>0.0.3-SNAPSHOT</version>
-        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
