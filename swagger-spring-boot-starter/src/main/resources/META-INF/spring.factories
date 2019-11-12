@@ -1,3 +1,2 @@
 # auto configuration
-org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-com.xin.swagger.configuration.Swagger2AutoConfiguration
+org.springframework.boot.autoconfigure.EnableAutoConfiguration=com.xin.swagger.configuration.Swagger2AutoConfiguration
