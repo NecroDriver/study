@@ -5,11 +5,9 @@ spring:
     name: study-service-daily
   #数据库相关配置
   datasource:
-    url: jdbc:mysql://192.168.0.148:3306/livedb?characterEncoding=UTF-8&ServerTimeZone=Asia/shanghai
-    username: root
-    password: bzt#2016
-    initialSize: 4
-    minIdle: 4
-mybatis:
-  mapper-locations: classPath:/mapper/*.xml
-  type-aliases-package: com.xin.*
+    druid:
+      url: jdbc:mysql://192.168.0.148:3306/livedb?characterEncoding=UTF-8&ServerTimeZone=Asia/shanghai
+      username: root
+      password: bzt#2016
+      initialSize: 4
+      minIdle: 4

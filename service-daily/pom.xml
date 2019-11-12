@@ -31,11 +31,11 @@
         </dependency>
 
         <!--    本地仓库    -->
-<!--        <dependency>-->
-<!--            <groupId>com.xin</groupId>-->
-<!--            <artifactId>boot-starter-jdbc</artifactId>-->
-<!--            <version>0.0.2-SNAPSHOT</version>-->
-<!--        </dependency>-->
+        <dependency>
+            <groupId>com.xin</groupId>
+            <artifactId>druid-spring-boot-starter</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
         <dependency>
             <groupId>com.xin</groupId>
             <artifactId>swagger-spring-boot-starter</artifactId>
