@@ -1,0 +1,198 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.xin.daily.dao.UserLoginMapper">
+  <resultMap id="BaseResultMap" type="com.xin.daily.entity.UserLogin">
+    <!--@mbg.generated-->
+    <!--@Table study.user_login-->
+    <id column="id" property="id" />
+    <result column="account" property="account" />
+    <result column="username" property="username" />
+    <result column="encrypt_password" property="encryptPassword" />
+    <result column="salt" property="salt" />
+    <result column="phone" property="phone" />
+    <result column="email" property="email" />
+    <result column="platform" property="platform" />
+    <result column="create_time" property="createTime" />
+    <result column="creator" property="creator" />
+    <result column="creator_ip" property="creatorIp" />
+    <result column="modify_time" property="modifyTime" />
+    <result column="modifier" property="modifier" />
+    <result column="modifier_ip" property="modifierIp" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    <!--@mbg.generated-->
+    id, account, username, encrypt_password, salt, phone, email, platform, create_time, 
+    creator, creator_ip, modify_time, modifier, modifier_ip
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    <!--@mbg.generated-->
+    select 
+    <include refid="Base_Column_List" />
+    from study.user_login
+    where id = #{id}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    <!--@mbg.generated-->
+    delete from study.user_login
+    where id = #{id}
+  </delete>
+  <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xin.daily.entity.UserLogin" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into study.user_login (account, username, encrypt_password, salt, phone, email, 
+      platform, create_time, creator, creator_ip, modify_time, modifier, 
+      modifier_ip)
+    values (#{account}, #{username}, #{encryptPassword}, #{salt}, #{phone}, #{email}, 
+      #{platform}, #{createTime}, #{creator}, #{creatorIp}, #{modifyTime}, #{modifier}, 
+      #{modifierIp})
+  </insert>
+  <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xin.daily.entity.UserLogin" useGeneratedKeys="true">
+    <!--@mbg.generated-->
+    insert into study.user_login
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="account != null">
+        account,
+      </if>
+      <if test="username != null">
+        username,
+      </if>
+      <if test="encryptPassword != null">
+        encrypt_password,
+      </if>
+      <if test="salt != null">
+        salt,
+      </if>
+      <if test="phone != null">
+        phone,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
+      <if test="platform != null">
+        platform,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="creator != null">
+        creator,
+      </if>
+      <if test="creatorIp != null">
+        creator_ip,
+      </if>
+      <if test="modifyTime != null">
+        modify_time,
+      </if>
+      <if test="modifier != null">
+        modifier,
+      </if>
+      <if test="modifierIp != null">
+        modifier_ip,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="account != null">
+        #{account},
+      </if>
+      <if test="username != null">
+        #{username},
+      </if>
+      <if test="encryptPassword != null">
+        #{encryptPassword},
+      </if>
+      <if test="salt != null">
+        #{salt},
+      </if>
+      <if test="phone != null">
+        #{phone},
+      </if>
+      <if test="email != null">
+        #{email},
+      </if>
+      <if test="platform != null">
+        #{platform},
+      </if>
+      <if test="createTime != null">
+        #{createTime},
+      </if>
+      <if test="creator != null">
+        #{creator},
+      </if>
+      <if test="creatorIp != null">
+        #{creatorIp},
+      </if>
+      <if test="modifyTime != null">
+        #{modifyTime},
+      </if>
+      <if test="modifier != null">
+        #{modifier},
+      </if>
+      <if test="modifierIp != null">
+        #{modifierIp},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.xin.daily.entity.UserLogin">
+    <!--@mbg.generated-->
+    update study.user_login
+    <set>
+      <if test="account != null">
+        account = #{account},
+      </if>
+      <if test="username != null">
+        username = #{username},
+      </if>
+      <if test="encryptPassword != null">
+        encrypt_password = #{encryptPassword},
+      </if>
+      <if test="salt != null">
+        salt = #{salt},
+      </if>
+      <if test="phone != null">
+        phone = #{phone},
+      </if>
+      <if test="email != null">
+        email = #{email},
+      </if>
+      <if test="platform != null">
+        platform = #{platform},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+      <if test="creator != null">
+        creator = #{creator},
+      </if>
+      <if test="creatorIp != null">
+        creator_ip = #{creatorIp},
+      </if>
+      <if test="modifyTime != null">
+        modify_time = #{modifyTime},
+      </if>
+      <if test="modifier != null">
+        modifier = #{modifier},
+      </if>
+      <if test="modifierIp != null">
+        modifier_ip = #{modifierIp},
+      </if>
+    </set>
+    where id = #{id}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.xin.daily.entity.UserLogin">
+    <!--@mbg.generated-->
+    update study.user_login
+    set account = #{account},
+      username = #{username},
+      encrypt_password = #{encryptPassword},
+      salt = #{salt},
+      phone = #{phone},
+      email = #{email},
+      platform = #{platform},
+      create_time = #{createTime},
+      creator = #{creator},
+      creator_ip = #{creatorIp},
+      modify_time = #{modifyTime},
+      modifier = #{modifier},
+      modifier_ip = #{modifierIp}
+    where id = #{id}
+  </update>
+</mapper>
