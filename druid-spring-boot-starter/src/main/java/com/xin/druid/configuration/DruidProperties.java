@@ -27,7 +27,7 @@ public class DruidProperties {
     /**
      * 最大活跃连接数
      */
-    private Integer maxAction = 20;
+    private Integer maxActive = 20;
     private WebStatFilter webStatFilter = new WebStatFilter();
     private StatViewServlet statViewServlet = new StatViewServlet();
 
@@ -175,12 +175,12 @@ public class DruidProperties {
         this.minIdle = minIdle;
     }
 
-    public Integer getMaxAction() {
-        return maxAction;
+    public Integer getMaxActive() {
+        return maxActive;
     }
 
-    public void setMaxAction(Integer maxAction) {
-        this.maxAction = maxAction;
+    public void setMaxActive(Integer maxActive) {
+        this.maxActive = maxActive;
     }
 
     public WebStatFilter getWebStatFilter() {

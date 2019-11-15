@@ -5,11 +5,13 @@ import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 
 import javax.servlet.Servlet;
 import javax.sql.DataSource;
@@ -34,10 +36,22 @@ public class DruidAutoConfiguration {
         this.druidProperties = druidProperties;
     }
 
+    /**
+     * @ Bean 声明，DataSource 对象为 Spring 容器所管理;
+     * @ Primary 表示这里定义的DataSource将覆盖其他来源的DataSource。
+     */
     @Bean
-    public DataSource druidDataSource() {
+    @Primary
+    public DataSource dataSource() {
         logger.info("==== init druid dataSource ====");
-        return new DruidDataSource();
+        DruidDataSource dataSource = new DruidDataSource();
+        dataSource.setUrl(druidProperties.getUrl());
+        dataSource.setUsername(druidProperties.getUsername());
+        dataSource.setPassword(druidProperties.getPassword());
+        dataSource.setInitialSize(druidProperties.getInitialSize());
+        dataSource.setMinIdle(druidProperties.getInitialSize());
+        dataSource.setMaxActive(druidProperties.getMaxActive());
+        return dataSource;
     }
 
     /**

@@ -13,5 +13,7 @@ spring:
       minIdle: 4
 #mybatis
 mybatis:
-  mapper-locations: classpath:mapper/*.xml
-  type-aliases-package: com.xin.daily
+#  mybatis的数据库映射地址
+  mapper-locations: classpath:mapper/*Mapper.xml
+#  实体类地址
+  type-aliases-package: com.xin.daily.entity

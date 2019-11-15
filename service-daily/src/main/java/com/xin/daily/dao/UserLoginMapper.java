@@ -4,17 +4,15 @@ import com.xin.daily.entity.UserLogin;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * 
- *  
- * @author creator mafh 2019/11/14 17:12
+ * @author creator mafh 2019/11/15 15:04
  * @author updater
- *
  * @version 1.0.0
  */
 @Mapper
 public interface UserLoginMapper {
     /**
      * delete by primary key
+     *
      * @param id primaryKey
      * @return deleteCount
      */
@@ -22,6 +20,7 @@ public interface UserLoginMapper {
 
     /**
      * insert record to table
+     *
      * @param record the record
      * @return insert count
      */
@@ -29,6 +28,7 @@ public interface UserLoginMapper {
 
     /**
      * insert record to table selective
+     *
      * @param record the record
      * @return insert count
      */
@@ -36,6 +36,7 @@ public interface UserLoginMapper {
 
     /**
      * select by primary key
+     *
      * @param id primary key
      * @return object by primary key
      */
@@ -43,6 +44,7 @@ public interface UserLoginMapper {
 
     /**
      * update record
+     *
      * @param record the updated record
      * @return update count
      */
@@ -50,6 +52,7 @@ public interface UserLoginMapper {
 
     /**
      * update record selective
+     *
      * @param record the updated record
      * @return update count
      */

@@ -2,14 +2,12 @@ package com.xin.daily.entity;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
-
 import java.io.Serializable;
 import java.util.Date;
-
 import lombok.Data;
 
 /**
- * @author creator mafh 2019/11/14 17:12
+ * @author creator mafh 2019/11/15 15:04
  * @author updater
  * @version 1.0.0
  */
@@ -33,6 +31,12 @@ public class UserLogin implements Serializable {
      */
     @ApiModelProperty(value = "用户名")
     private String username;
+
+    /**
+     * 用户编号
+     */
+    @ApiModelProperty(value = "用户编号")
+    private String userCode;
 
     /**
      * 加密密码
