@@ -3,14 +3,14 @@ server:
 spring:
   datasource:
     druid:
-      url: jdbc:mysql://localhost:3306/study?characterEncoding=utf-8&ServerTimeZone=Asia/shanghai
+      url: jdbc:mysql://localhost:3306/study?characterEncoding=utf-8&serverTimeZone=Asia/Shanghai
       username: root
-      password: bzt#2016
+      password: password
       initialSize: 4
       minIdle: 4
       maxActive: 30
       statViewServlet:
         loginPassword: testAdmin
-    url: jdbc:mysql://localhost:3306/study?characterEncoding=utf-8&ServerTimeZone=Asia/shanghai
-    username: root
-    password: bzt#2016
+#    url: jdbc:mysql://localhost:3306/study?characterEncoding=utf-8&ServerTimeZone=Asia/Shanghai
+#    username: root
+#    password: password

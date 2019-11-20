@@ -10,7 +10,7 @@
     </parent>
     <groupId>com.xin</groupId>
     <artifactId>druid-spring-boot-starter</artifactId>
-    <version>0.0.1-SNAPSHOT</version>
+    <version>0.0.2-SNAPSHOT</version>
     <name>druid-spring-boot-starter</name>
     <description>Study project for Spring Boot</description>
 
