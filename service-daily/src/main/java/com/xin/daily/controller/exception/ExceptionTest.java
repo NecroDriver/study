@@ -6,4 +6,15 @@ package com.xin.daily.controller.exception;
  * @version 1.0.0
  */
 public class ExceptionTest {
+
+    public static void main(String[] args) {
+        try {
+            int x = 1/0;
+        }catch (Exception e){
+            e.printStackTrace();
+            System.out.println(88888);
+            return;
+        }
+        System.out.println(111123);
+    }
 }

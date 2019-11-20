@@ -6,6 +6,8 @@ import com.xin.daily.service.user.IUserLoginService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 /**
  * 用户登录service实现类
  *
@@ -50,8 +52,16 @@ public class UserLoginServiceImpl implements IUserLoginService {
         userLogin.setUsername(username);
         userLogin.setUserCode("");
         userLogin.setEncryptPassword(password);
+        userLogin.setSalt("");
         userLogin.setPhone(phone);
         userLogin.setEmail(email);
+        userLogin.setPlatform("");
+        userLogin.setCreateTime(new Date());
+        userLogin.setCreator("");
+        userLogin.setCreatorIp("");
+        userLogin.setModifyTime(new Date());
+        userLogin.setModifier("");
+        userLogin.setModifierIp("");
         int id = userLoginMapper.insert(userLogin);
 
         /*----------------------------------- 日志记录 -----------------------------------*/
