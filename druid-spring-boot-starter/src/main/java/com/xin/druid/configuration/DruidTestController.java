@@ -32,18 +32,18 @@ public class DruidTestController {
      */
     @GetMapping("/dataSource")
     public String testDataSource() {
-        String account = "";
+        String time = "";
         try {
             Connection connect = druidAutoConfiguration.dataSource().getConnection();
-            PreparedStatement ps = connect.prepareStatement("select now() FROM DUAL");
+            PreparedStatement ps = connect.prepareStatement("select now() as time FROM DUAL");
             ResultSet rs = ps.executeQuery();
             while (rs.next()) {
-                account = rs.getString("account");
+                time = rs.getString("time");
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return account;
+        return time;
     }
 
 }
