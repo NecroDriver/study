@@ -1,7 +1,7 @@
 package com.xin.daily.controller.user;
 
 import com.xin.daily.service.user.IUserLoginService;
-import com.xin.daily.vo.ResultVo;
+import com.xin.web.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
