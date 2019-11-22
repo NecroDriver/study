@@ -9,10 +9,9 @@
         <property name="basePath">E://logs//web-spring-boot-starter</property>
 
         <!-- 控制台默认输出格式,"%-5level":日志级别,"%l":输出完整的错误位置,是小写的L,因为有行号显示,所以影响日志输出的性能 -->
-        <!--        <property name="console_log_pattern">%style{%d{yyyy-MM-dd HH:mm:ss.SSS}}{bright,green} %highlight[%-5level] %l - %m%n%style{%throwable}{red}</property>-->
-        <property name="console_log_pattern">%style{%d{yyyy-MM-dd HH:mm:ss.SSS}}{yellow} %highlight{%-5level} [%style{%t}{bright,blue}] %style{%C{1.}}{bright,green}: %msg%n%style{%throwable}{red}</property>
+        <property name="console_log_pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %l - %m%n</property>
         <!-- 日志文件默认输出格式,不带行号输出(行号显示会影响日志输出性能);%C:大写,类名;%M:方法名;%m:错误信息;%n:换行 -->
-        <property name="log_pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] [%style{%t}{bright,blue}] %style{%C.%M{1.}}{bright,yellow} - %m%n</property>
+        <property name="log_pattern">%d{yyyy-MM-dd HH:mm:ss.SSS} [%-5level] %C.%M - %m%n</property>
 
         <!-- 日志默认切割的最小单位 -->
         <property name="every_file_size">20MB</property>
@@ -49,6 +48,7 @@
 
         <!-- 控制台显示的日志最低级别 -->
         <property name="console_print_level">DEBUG</property>
+
     </Properties>
 
     <!--定义appender -->
@@ -57,8 +57,8 @@
         <Console name="Console" target="SYSTEM_OUT">
             <!-- 设置控制台只输出level及以上级别的信息(onMatch),其他的直接拒绝(onMismatch)-->
             <ThresholdFilter level="${console_print_level}" onMatch="ACCEPT" onMismatch="DENY"/>
-            <!-- 设置输出格式及颜色,不设置默认为:%m%n -->
-            <PatternLayout pattern="${console_log_pattern}" disableAnsi="false" noConsoleNoAnsi="false"/>
+            <!-- 设置输出格式,不设置默认为:%m%n -->
+            <PatternLayout pattern="${console_log_pattern}"/>
         </Console>
 
         <!-- 打印root中指定的level级别以上的日志到文件 -->
@@ -66,7 +66,7 @@
             <PatternLayout pattern="${log_pattern}"/>
             <SizeBasedTriggeringPolicy size="${every_file_size}"/>
             <!-- 设置同类型日志,同一文件夹下可以存放的数量,如果不设置此属性则默认存放7个文件 -->
-            <DefaultRolloverStrategy max="${rolling_max}"/>
+            <DefaultRolloverStrategy max="${rolling_max}" />
             <!-- 匹配INFO以及以上级别 -->
             <Filters>
                 <ThresholdFilter level="INFO" onMatch="ACCEPT" onMismatch="DENY"/>
@@ -77,7 +77,7 @@
         <RollingFile name="InfoFile" fileName="${info_fileName}" filePattern="${info_filePattern}">
             <PatternLayout pattern="${log_pattern}"/>
             <SizeBasedTriggeringPolicy size="${every_file_size}"/>
-            <DefaultRolloverStrategy max="${info_max}"/>
+            <DefaultRolloverStrategy max="${info_max}" />
             <!-- 匹配INFO级别 -->
             <Filters>
                 <ThresholdFilter level="WARN" onMatch="DENY" onMismatch="NEUTRAL"/>
@@ -89,7 +89,7 @@
         <RollingFile name="WarnFile" fileName="${warn_fileName}" filePattern="${warn_filePattern}">
             <PatternLayout pattern="${log_pattern}"/>
             <SizeBasedTriggeringPolicy size="${every_file_size}"/>
-            <DefaultRolloverStrategy max="${warn_max}"/>
+            <DefaultRolloverStrategy max="${warn_max}" />
             <!-- 匹配WARN级别 -->
             <Filters>
                 <ThresholdFilter level="ERROR" onMatch="DENY" onMismatch="NEUTRAL"/>
@@ -101,7 +101,7 @@
         <RollingFile name="ErrorFile" fileName="${error_fileName}" filePattern="${error_filePattern}">
             <PatternLayout pattern="${log_pattern}"/>
             <SizeBasedTriggeringPolicy size="${every_file_size}"/>
-            <DefaultRolloverStrategy max="${error_max}"/>
+            <DefaultRolloverStrategy max="${error_max}" />
             <!-- 匹配ERROR级别 -->
             <Filters>
                 <ThresholdFilter level="FATAL" onMatch="DENY" onMismatch="NEUTRAL"/>
@@ -113,16 +113,16 @@
     <!--然后定义logger,只有定义了logger并引入的appender,appender才会生效-->
     <loggers>
         <!-- 设置对打印sql语句的支持 additivity="false"表示不输出到控制台-->
-        <logger name="java.sql" level="debug">
+        <logger name="java.sql" level="debug" additivity="false">
             <appender-ref ref="Console"/>
         </logger>
-        <!--spring日志-->
-        <Logger name="org.springframework" level="info"/>
-        <!--druid数据源日志-->
-        <Logger name="druid.sql.Statement" level="warn"/>
-        <!-- mybatis日志 -->
-        <Logger name="com.mybatis" level="warn"/>
-        <!--根日志设置-->
+        <Logger name="org.springframework" level="info" additivity="false">
+            <AppenderRef ref="Console"/>
+        </Logger>
+        <Logger name="org.hibernate.validator.internal.util.Version" level="warn" />
+        <Logger name="org.apache.coyote.http11.Http11NioProtocol" level="warn" />
+        <Logger name="org.apache.tomcat.util.net.NioSelectorPool" level="warn" />
+        <!--建立一个默认的root的logger-->
         <root level="${output_log_level}">
             <appender-ref ref="RollingFile"/>
             <appender-ref ref="Console"/>

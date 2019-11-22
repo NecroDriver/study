@@ -1,6 +1,10 @@
 package com.xin.web.log;
 
+import com.xin.web.base.Base;
 import com.xin.web.vo.ResultVo;
+import org.springframework.util.Assert;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -9,9 +13,16 @@ import org.springframework.web.bind.annotation.RestController;
  * @version 1.0.0
  */
 @RestController
-public class LogTest {
+@RequestMapping("/log")
+public class LogTest extends Base {
 
+    @GetMapping("/test")
     public ResultVo logTest(){
-        return null;
+        logger.debug("逝者如斯夫");
+        logger.warn("不舍昼夜");
+        logger.error("武夫居中");
+        System.out.println("阑尾");
+        Assert.notNull(null, "断言异常");
+        return ResultVo.successVo(null);
     }
 }
