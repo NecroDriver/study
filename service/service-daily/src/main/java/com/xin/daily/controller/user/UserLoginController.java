@@ -1,6 +1,7 @@
 package com.xin.daily.controller.user;
 
 import com.xin.daily.service.user.IUserLoginService;
+import com.xin.web.base.BaseController;
 import com.xin.web.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/study/user")
-public class UserLoginController {
+public class UserLoginController extends BaseController {
 
     /**
      * 用户登录service
@@ -36,7 +37,7 @@ public class UserLoginController {
      */
     @PostMapping(value = "/register")
     public ResultVo register(String account, String username, String password, String phone, String email) {
-        int id = userLoginService.register(account, username, password, phone, email);
-        return ResultVo.newResultVo(id > 0, id, "注册");
+        int num = userLoginService.register(account, username, password, phone, email);
+        return ResultVo.newResultVo(num > 0, num, "注册");
     }
 }

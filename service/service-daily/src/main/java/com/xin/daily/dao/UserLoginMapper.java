@@ -35,14 +35,6 @@ public interface UserLoginMapper {
     int insertSelective(UserLogin record);
 
     /**
-     * select by primary key
-     *
-     * @param id primary key
-     * @return object by primary key
-     */
-    UserLogin selectByPrimaryKey(Integer id);
-
-    /**
      * update record
      *
      * @param record the updated record
@@ -57,4 +49,12 @@ public interface UserLoginMapper {
      * @return update count
      */
     int updateByPrimaryKey(UserLogin record);
+
+    /**
+     * 根据账户查询用户信息
+     *
+     * @param account 账户
+     * @return 结果
+     */
+    UserLogin selectByAccount(String account);
 }

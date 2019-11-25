@@ -12,9 +12,15 @@ spring:
       initial-size: 8
       min-idle: 6
       max-active: 16
+  # redis相关配置
+  redis:
+    host: localhost
+    password: redis
+    port: 6379
 #mybatis
 mybatis:
-#  mybatis的数据库映射地址
+  #  mybatis的数据库映射地址
   mapper-locations: classpath:mapper/*Mapper.xml
-#  实体类地址
+  #  实体类地址
   type-aliases-package: com.xin.daily.entity
+

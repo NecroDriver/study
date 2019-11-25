@@ -17,7 +17,7 @@ public interface IUserLoginService {
      * @param password 密码
      * @param phone    手机号
      * @param email    邮箱
-     * @return id
+     * @return num
      */
     int register(String account, String username, String password, String phone, String email);
 }
