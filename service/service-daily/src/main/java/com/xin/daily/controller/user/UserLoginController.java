@@ -2,6 +2,7 @@ package com.xin.daily.controller.user;
 
 import com.xin.daily.service.user.IUserLoginService;
 import com.xin.web.base.BaseController;
+import com.xin.web.pojo.Context;
 import com.xin.web.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,16 +29,31 @@ public class UserLoginController extends BaseController {
     /**
      * 注册
      *
+     * @param context  上下文
      * @param account  账户
      * @param username 用户名
      * @param password 密码
      * @param phone    手机号
      * @param email    邮箱
-     * @return id
+     * @return num
      */
     @PostMapping(value = "/register")
-    public ResultVo register(String account, String username, String password, String phone, String email) {
-        int num = userLoginService.register(account, username, password, phone, email);
+    public ResultVo register(Context context, String account, String username, String password, String phone, String email) {
+        int num = userLoginService.register(context, account, username, password, phone, email);
         return ResultVo.newResultVo(num > 0, num, "注册");
+    }
+
+    /**
+     * 登录
+     *
+     * @param context  上下文
+     * @param account  账户
+     * @param password 密码
+     * @return 结果
+     */
+    @PostMapping("/login")
+    public ResultVo login(Context context, String account, String password) {
+        boolean result = userLoginService.login(context, account, password);
+        return ResultVo.newResultVo(result,"登录");
     }
 }

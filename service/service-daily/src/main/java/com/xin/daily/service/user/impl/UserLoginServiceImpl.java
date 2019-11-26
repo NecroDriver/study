@@ -3,12 +3,17 @@ package com.xin.daily.service.user.impl;
 import com.xin.daily.dao.UserLoginMapper;
 import com.xin.daily.entity.UserLogin;
 import com.xin.daily.service.user.IUserLoginService;
+import com.xin.redis.util.RedisUtils;
 import com.xin.web.base.BaseService;
-import com.xin.web.utils.SnowFlake;
+import com.xin.web.consts.RedisConst;
+import com.xin.web.pojo.Context;
+import com.xin.web.utils.convert.ConvertUtils;
+import com.xin.web.utils.crypt.SnowFlake;
+import com.xin.web.vo.UserVo;
+import org.mindrot.jbcrypt.BCrypt;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.Assert;
-import org.springframework.util.DigestUtils;
 
 import java.util.Date;
 import java.util.UUID;
@@ -28,10 +33,16 @@ public class UserLoginServiceImpl extends BaseService implements IUserLoginServi
      */
     @Autowired
     private UserLoginMapper userLoginMapper;
+    /**
+     * redis工具类
+     */
+    @Autowired
+    private RedisUtils redisUtils;
 
     /**
      * 注册
      *
+     * @param context  上下文
      * @param account  账户
      * @param username 用户名
      * @param password 密码
@@ -40,7 +51,7 @@ public class UserLoginServiceImpl extends BaseService implements IUserLoginServi
      * @return num
      */
     @Override
-    public int register(String account, String username, String password, String phone, String email) {
+    public int register(Context context, String account, String username, String password, String phone, String email) {
 
         /*----------------------------------- 日志记录 -----------------------------------*/
         logger.debug("注册，账户：{}，用户名：{}，密码：{}，手机号：{}，邮箱：{}", account, username, password, phone, email);
@@ -65,11 +76,8 @@ public class UserLoginServiceImpl extends BaseService implements IUserLoginServi
         SnowFlake snowFlake = new SnowFlake(1, 1);
         String userCode = "YH" + snowFlake.nextId();
         userLogin.setUserCode(userCode);
-        // 取uuid作为盐
-        String salt = UUID.randomUUID().toString();
-        userLogin.setSalt(salt);
-        // 用md5进行加密
-        userLogin.setEncryptPassword(DigestUtils.md5DigestAsHex((password + salt).getBytes()));
+        // 用bCrypt进行加密
+        userLogin.setEncryptPassword(BCrypt.hashpw(password, BCrypt.gensalt()));
         userLogin.setPhone(phone);
         userLogin.setEmail(email);
         userLogin.setPlatform("study");
@@ -86,5 +94,46 @@ public class UserLoginServiceImpl extends BaseService implements IUserLoginServi
 
         /*----------------------------------- 方法返回 -----------------------------------*/
         return num;
+    }
+
+    /**
+     * 登录
+     *
+     * @param context  上下文
+     * @param account  账户
+     * @param password 密码
+     * @return 结果
+     */
+    @Override
+    public boolean login(Context context, String account, String password) {
+
+        /*----------------------------------- 日志记录 -----------------------------------*/
+        logger.debug("登录，账户：{}，密码：{}", account, password);
+
+        /*----------------------------------- 参数校验 -----------------------------------*/
+        Assert.notNull(account, "账户不能为空！");
+        Assert.notNull(password, "密码不能为空！");
+
+        /*----------------------------------- 业务处理 -----------------------------------*/
+        // 查询账户
+        UserLogin userLogin = userLoginMapper.selectByAccount(account);
+        Assert.notNull(userLogin, "该账户不存在！");
+        // 验证密码
+        boolean result = BCrypt.checkpw(password, userLogin.getEncryptPassword());
+        // 登录成功
+        if (result) {
+            // 生成token
+            String token = UUID.randomUUID().toString();
+            // 转化vo
+            UserVo userVo = ConvertUtils.convert(userLogin, UserVo.class);
+            // 存入redis，过期时间1小时
+            redisUtils.set(RedisConst.USER_LOGIN_KEY + token, userVo, 3600);
+        }
+
+        /*----------------------------------- 日志记录 -----------------------------------*/
+        logger.debug("登录结束！结果：{}", result);
+
+        /*----------------------------------- 方法返回 -----------------------------------*/
+        return result;
     }
 }

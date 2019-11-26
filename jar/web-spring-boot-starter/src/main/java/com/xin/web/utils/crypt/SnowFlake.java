@@ -1,4 +1,4 @@
-package com.xin.web.utils;
+package com.xin.web.utils.crypt;
 
 /**
  * 雪花算法-用于生成唯一id

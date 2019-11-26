@@ -1,5 +1,7 @@
 package com.xin.daily.service.user;
 
+import com.xin.web.pojo.Context;
+
 /**
  * 用户登录service
  *
@@ -12,6 +14,7 @@ public interface IUserLoginService {
     /**
      * 注册
      *
+     * @param context  上下文
      * @param account  账户
      * @param username 用户名
      * @param password 密码
@@ -19,5 +22,15 @@ public interface IUserLoginService {
      * @param email    邮箱
      * @return num
      */
-    int register(String account, String username, String password, String phone, String email);
+    int register(Context context, String account, String username, String password, String phone, String email);
+
+    /**
+     * 登录
+     *
+     * @param context  上下文
+     * @param account  账户
+     * @param password 密码
+     * @return 结果
+     */
+    boolean login(Context context, String account, String password);
 }

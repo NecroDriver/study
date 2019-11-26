@@ -1,5 +1,7 @@
 package com.xin.web.utils;
 
+import com.xin.web.utils.crypt.SnowFlake;
+
 /**
  * 工具测试类
  *

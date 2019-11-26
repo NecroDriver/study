@@ -45,12 +45,6 @@ public class UserLogin implements Serializable {
     private String encryptPassword;
 
     /**
-     * 盐
-     */
-    @ApiModelProperty(value = "盐")
-    private String salt;
-
-    /**
      * 手机号
      */
     @ApiModelProperty(value = "手机号")

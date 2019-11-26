@@ -52,6 +52,17 @@ public class ResultVo<T> {
     }
 
     /**
+     * 生成结果静态调用方法
+     *
+     * @param result  结论
+     * @param message 信息
+     * @return 对象
+     */
+    public static ResultVo<Object> newResultVo(Boolean result, String message) {
+        return result ? new ResultVo<>(true, message + "成功！") : new ResultVo<>(false, message + "失败！");
+    }
+
+    /**
      * 生成成功静态调用方法
      *
      * @param data 数据
