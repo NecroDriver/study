@@ -8,6 +8,7 @@ import com.xin.web.base.BaseService;
 import com.xin.web.consts.RedisConst;
 import com.xin.web.pojo.Context;
 import com.xin.web.utils.convert.ConvertUtils;
+import com.xin.web.utils.convert.JsonUtils;
 import com.xin.web.utils.crypt.SnowFlake;
 import com.xin.web.vo.UserVo;
 import org.mindrot.jbcrypt.BCrypt;
@@ -127,7 +128,7 @@ public class UserLoginServiceImpl extends BaseService implements IUserLoginServi
             // 转化vo
             UserVo userVo = ConvertUtils.convert(userLogin, UserVo.class);
             // 存入redis，过期时间1小时
-            redisUtils.set(RedisConst.USER_LOGIN_KEY + token, userVo, 3600);
+            redisUtils.set(RedisConst.USER_LOGIN_KEY + token, JsonUtils.toJson(userVo), 3600);
         }
 
         /*----------------------------------- 日志记录 -----------------------------------*/
