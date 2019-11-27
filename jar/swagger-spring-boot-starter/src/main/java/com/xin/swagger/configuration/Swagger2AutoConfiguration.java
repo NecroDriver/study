@@ -1,8 +1,7 @@
 package com.xin.swagger.configuration;
 
-import org.springframework.beans.factory.annotation.Autowired;
+import com.xin.web.pojo.Context;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -42,13 +41,14 @@ public class Swagger2AutoConfiguration extends WebMvcConfigurationSupport {
         return new Docket(DocumentationType.SWAGGER_2)
                 // 将api的元信息设置为包含在json resource listing响应中
                 .apiInfo(apiInfo())
-                //启动用于api选择的生成器
+                // 启动用于api选择的生成器
                 .select()
-                //为当前包路径
+                // 为当前包路径
                 .apis(RequestHandlerSelectors.basePackage(swagger2Properties.getBasePackage()))
                 .paths(PathSelectors.any())
                 .build()
-                ;
+                // 忽略固定参数
+                .ignoredParameterTypes(Context.class);
     }
 
     private ApiInfo apiInfo() {
