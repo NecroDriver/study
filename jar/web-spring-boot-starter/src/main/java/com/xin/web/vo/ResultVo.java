@@ -82,6 +82,17 @@ public class ResultVo<T> {
         return new ResultVo(false, message);
     }
 
+    /**
+     * 生成失败静态调用方法
+     *
+     * @param message 信息
+     * @param data    数据
+     * @return 对象
+     */
+    public static ResultVo<Object> failureVo(String message, Object data) {
+        return new ResultVo<>(false, data, message);
+    }
+
     public Boolean getResult() {
         return result;
     }

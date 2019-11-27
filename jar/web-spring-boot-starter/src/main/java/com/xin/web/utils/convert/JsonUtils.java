@@ -3,7 +3,6 @@ package com.xin.web.utils.convert;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.*;
 import com.fasterxml.jackson.databind.module.SimpleModule;
@@ -19,8 +18,6 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.sql.Timestamp;
 import java.util.Date;
-import java.util.List;
-import java.util.Map;
 import java.util.TimeZone;
 
 /**
@@ -45,7 +42,7 @@ public class JsonUtils extends ObjectMapper {
         private static final JsonUtils INSTANCE = new JsonUtils();
     }
 
-    public JsonUtils(){
+    private JsonUtils() {
         // 为null时不序列化
         this.setSerializationInclusion(JsonInclude.Include.NON_EMPTY);
         // 允许单引号
@@ -60,7 +57,7 @@ public class JsonUtils extends ObjectMapper {
         this.getSerializerProvider().setNullValueSerializer(new JsonSerializer<Object>() {
             @Override
             public void serialize(Object value, JsonGenerator jgen,
-                                  SerializerProvider provider) throws IOException, JsonProcessingException {
+                                  SerializerProvider provider) throws IOException {
                 jgen.writeString("");
             }
         });
@@ -68,7 +65,7 @@ public class JsonUtils extends ObjectMapper {
         this.registerModule(new SimpleModule().addSerializer(Date.class, new JsonSerializer<Date>() {
             @Override
             public void serialize(Date value, JsonGenerator jgen,
-                                  SerializerProvider provider) throws IOException, JsonProcessingException {
+                                  SerializerProvider provider) throws IOException {
                 if (value != null) {
                     jgen.writeString(DateUtils.formatDate(value, "yyyy-MM-dd HH:mm:ss"));
                 }
@@ -76,7 +73,7 @@ public class JsonUtils extends ObjectMapper {
         }));
         this.registerModule(new SimpleModule().addDeserializer(Date.class, new JsonDeserializer<Date>() {
             @Override
-            public Date deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+            public Date deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
                 String dateString = p.getValueAsString();
                 if (StringUtils.isEmpty(dateString)) {
                     return null;
@@ -101,7 +98,7 @@ public class JsonUtils extends ObjectMapper {
         }));
         this.registerModule(new SimpleModule().addDeserializer(Timestamp.class, new JsonDeserializer<Timestamp>() {
             @Override
-            public Timestamp deserialize(JsonParser p, DeserializationContext ctxt) throws IOException, JsonProcessingException {
+            public Timestamp deserialize(JsonParser p, DeserializationContext ctxt) throws IOException {
                 String valueAsString = p.getValueAsString();
                 if (StringUtils.isEmpty(valueAsString)) {
                     return null;
@@ -130,7 +127,7 @@ public class JsonUtils extends ObjectMapper {
      * 如果对象为Null, 返回"null".
      * 如果集合为空集合, 返回"[]".
      */
-    public String toJsonString(Object object) {
+    private String toJsonString(Object object) {
         try {
             return this.writeValueAsString(object);
         } catch (IOException e) {
@@ -144,7 +141,7 @@ public class JsonUtils extends ObjectMapper {
      * 如果对象为Null, 返回"null".
      * 如果集合为空集合, 返回"[]".
      */
-    public void toJsonStream(OutputStream outputStream, Object object) {
+    private void toJsonStream(OutputStream outputStream, Object object) {
         try {
             this.writeValue(outputStream, object);
         } catch (IOException e) {
@@ -155,7 +152,7 @@ public class JsonUtils extends ObjectMapper {
     /**
      * 输出JSONP格式数据.
      */
-    public String toJsonpString(String functionName, Object object) {
+    private String toJsonpString(String functionName, Object object) {
         return toJsonString(new JSONPObject(functionName, object));
     }
 
@@ -165,7 +162,7 @@ public class JsonUtils extends ObjectMapper {
      * 如果JSON字符串为"[]", 返回空集合.
      * 如需反序列化复杂Collection如List<MyBean>, 请使用fromJson(String,JavaType)
      */
-    public <T> T fromJsonString(String jsonString, Class<T> clazz) {
+    private <T> T fromJsonString(String jsonString, Class<T> clazz) {
         if (StringUtils.isEmpty(jsonString) || "<CLOB>".equals(jsonString)) {
             return null;
         }
@@ -183,7 +180,7 @@ public class JsonUtils extends ObjectMapper {
      * 如果JSON字符串为"[]", 返回空集合.
      * 如需反序列化复杂Collection如List<MyBean>, 请使用fromJson(String,JavaType)
      */
-    public <T> T fromJsonStream(InputStream jsonString, Class<T> clazz) {
+    private <T> T fromJsonStream(InputStream jsonString, Class<T> clazz) {
         try {
             return this.readValue(jsonString, clazz);
         } catch (IOException e) {
@@ -198,7 +195,7 @@ public class JsonUtils extends ObjectMapper {
      * 如果JSON字符串为"[]", 返回空集合.
      * 如需反序列化复杂Collection如List<MyBean>, 请使用fromJson(String,JavaType)
      */
-    public <T> T fromJsonString(String jsonString, TypeReference<T> typeReference) {
+    private <T> T fromJsonString(String jsonString, TypeReference<T> typeReference) {
         if (StringUtils.isEmpty(jsonString) || "<CLOB>".equals(jsonString)) {
             return null;
         }
@@ -234,7 +231,7 @@ public class JsonUtils extends ObjectMapper {
      * ArrayList<MyBean>, 则调用constructCollectionType(ArrayList.class,MyBean.class)
      * HashMap<String,MyBean>, 则调用(HashMap.class,String.class, MyBean.class)
      */
-    public JavaType createCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {
+    private JavaType createCollectionType(Class<?> collectionClass, Class<?>... elementClasses) {
         return this.getTypeFactory().constructParametricType(collectionClass, elementClasses);
     }
 
@@ -263,16 +260,6 @@ public class JsonUtils extends ObjectMapper {
     }
 
     /**
-     * 支持使用Jaxb的Annotation，使得POJO上的annotation不用与Jackson耦合。
-     * 默认会先查找jaxb的annotation，如果找不到再找jackson的。
-     */
-    public JsonUtils enableJaxbAnnotation() {
-        JaxbAnnotationModule module = new JaxbAnnotationModule();
-        this.registerModule(module);
-        return this;
-    }
-
-    /**
      * 取出Mapper做进一步的设置或使用其他序列化API.
      */
     public ObjectMapper getMapper() {
@@ -282,7 +269,7 @@ public class JsonUtils extends ObjectMapper {
     /**
      * 获取当前实例
      */
-    public static JsonUtils getInstance() {
+    private static JsonUtils getInstance() {
         return JsonUtilsHolder.INSTANCE;
     }
 
@@ -324,25 +311,6 @@ public class JsonUtils extends ObjectMapper {
     @SuppressWarnings("unchecked")
     public static <T> T fromJson(InputStream jsonStream, Class<?> clazz) {
         return (T) JsonUtils.getInstance().fromJsonStream(jsonStream, clazz);
-    }
-
-    /**
-     * JSON字符串转换为 List<Map<String, Object>>
-     */
-    public static List<Map<String, Object>> fromJsonForMapList(String jsonString) {
-        List<Map<String, Object>> result = ListUtils.newArrayList();
-        if (StringUtils.startsWith(jsonString, "{")) {
-            Map<String, Object> map = fromJson(jsonString, Map.class);
-            if (map != null) {
-                result.add(map);
-            }
-        } else if (StringUtils.startsWith(jsonString, "[")) {
-            List<Map<String, Object>> list = fromJson(jsonString, List.class);
-            if (list != null) {
-                result = list;
-            }
-        }
-        return result;
     }
 
     /**

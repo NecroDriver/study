@@ -1,4 +1,4 @@
-package com.xin.lemontree.tools.cookie;
+package com.xin.web.utils.cookie;
 
 
 import org.springframework.util.StringUtils;
@@ -11,10 +11,11 @@ import java.net.URLDecoder;
 import java.net.URLEncoder;
 
 /**
+ * cookie工具类
+ *
  * @author creator mafh 2018/2/6 16:05
  * @author updater mafh
  * @version 1.0.0
- * @description cookie工具类
  */
 public final class CookieUtils {
 
@@ -81,8 +82,8 @@ public final class CookieUtils {
      * 设置 Cookie的值 在指定时间内生效,不编码
      */
     public static void setCookie(HttpServletRequest request, HttpServletResponse response, String cookieName,
-                                 String cookieValue, int cookieMaxage) {
-        setCookie(request, response, cookieName, cookieValue, cookieMaxage, false);
+                                 String cookieValue, int cookieMaxAge) {
+        setCookie(request, response, cookieName, cookieValue, cookieMaxAge, false);
     }
 
     /**
@@ -97,24 +98,24 @@ public final class CookieUtils {
      * 设置 Cookie的值 在指定时间内生效,编码
      */
     public static void setCookie(HttpServletRequest request, HttpServletResponse response, String cookieName,
-                                 String cookieValue, int cookieMaxage, boolean isEncode) {
-        doSetCookie(request, response, cookieName, cookieValue, cookieMaxage, isEncode);
+                                 String cookieValue, int cookieMaxAge, boolean isEncode) {
+        doSetCookie(request, response, cookieName, cookieValue, cookieMaxAge, isEncode);
     }
 
     /**
      * 设置 Cookie的值 在指定时间内生效, 编码参数(指定编码)
      */
     public static void setCookie(HttpServletRequest request, HttpServletResponse response, String cookieName,
-                                 String cookieValue, int cookieMaxage, String encodeString) {
-        doSetCookie(request, response, cookieName, cookieValue, cookieMaxage, encodeString);
+                                 String cookieValue, int cookieMaxAge, String encodeString) {
+        doSetCookie(request, response, cookieName, cookieValue, cookieMaxAge, encodeString);
     }
 
     /**
      * 删除 Cookie带cookie域名
      *
-     * @param request
-     * @param response
-     * @param cookieName
+     * @param request    请求
+     * @param response   响应
+     * @param cookieName cookie名称
      */
     public static void deleteCookie(HttpServletRequest request, HttpServletResponse response, String cookieName) {
         doSetCookie(request, response, cookieName, "", -1, false);
@@ -123,22 +124,22 @@ public final class CookieUtils {
     /**
      * 设置 Cookie的值，并使其在指定时间内生效
      *
-     * @param request
-     * @param response
-     * @param cookieName
-     * @param cookieValue
-     * @param cookieMaxage cookie生效的最大秒数
-     * @param isEncode
+     * @param request      请求
+     * @param response     响应
+     * @param cookieName   cookie名称
+     * @param cookieValue  cookie值
+     * @param cookieMaxAge cookie生效的最大秒数
+     * @param isEncode     是否编码
      */
-    private static final void doSetCookie(HttpServletRequest request, HttpServletResponse response,
-                                          String cookieName, String cookieValue, int cookieMaxage, boolean isEncode) {
+    private static void doSetCookie(HttpServletRequest request, HttpServletResponse response, String cookieName, String cookieValue, int cookieMaxAge, boolean isEncode) {
         try {
             cookieValue = isEncode ? URLEncoder.encode(cookieValue, "utf-8") : null == cookieValue ? "" : cookieValue;
             Cookie cookie = new Cookie(cookieName, cookieValue);
-            if (cookieMaxage > 0) {
-                cookie.setMaxAge(cookieMaxage);
+            if (cookieMaxAge > 0) {
+                cookie.setMaxAge(cookieMaxAge);
             }
-            if (null != request) {    // 设置域名的cookie
+            if (null != request) {
+                // 设置域名的cookie
                 String domainName = getDomainName(request);
                 if (!"localhost".equals(domainName)) {
                     cookie.setDomain(domainName);
@@ -154,21 +155,22 @@ public final class CookieUtils {
     /**
      * 设置 Cookie的值，并使其在指定时间内生效
      *
-     * @param request
-     * @param response
-     * @param cookieName
-     * @param cookieValue
-     * @param cookieMaxage cookie生效的最大秒数
-     * @param encodeString
+     * @param request      请求
+     * @param response     响应
+     * @param cookieName   cookie名称
+     * @param cookieValue  cookie值
+     * @param cookieMaxAge cookie生效的最大秒数
+     * @param encodeString 编码规则
      */
-    private static final void doSetCookie(HttpServletRequest request, HttpServletResponse response, String cookieName, String cookieValue, int cookieMaxage, String encodeString) {
+    private static void doSetCookie(HttpServletRequest request, HttpServletResponse response, String cookieName, String cookieValue, int cookieMaxAge, String encodeString) {
         try {
             cookieValue = null == cookieValue ? "" : URLEncoder.encode(cookieValue, encodeString);
             Cookie cookie = new Cookie(cookieName, cookieValue);
-            if (cookieMaxage > 0) {
-                cookie.setMaxAge(cookieMaxage);
+            if (cookieMaxAge > 0) {
+                cookie.setMaxAge(cookieMaxAge);
             }
-            if (null != request) { // 设置域名的cookie
+            if (null != request) {
+                // 设置域名的cookie
                 String domainName = getDomainName(request);
                 if (!"localhost".equals(domainName)) {
                     cookie.setDomain(domainName);
@@ -184,11 +186,11 @@ public final class CookieUtils {
     /**
      * 获取cookie的域名
      *
-     * @param request
-     * @return
+     * @param request 请求
+     * @return 域名
      */
-    private static final String getDomainName(HttpServletRequest request) {
-        String domainName = null;
+    private static String getDomainName(HttpServletRequest request) {
+        String domainName;
         String serverName = request.getRequestURL().toString();
         if (StringUtils.isEmpty(serverName)) {
             domainName = "";
@@ -199,9 +201,11 @@ public final class CookieUtils {
             serverName = serverName.substring(0, end);
             final String[] domains = serverName.split("\\.");
             int len = domains.length;
-            if (len > 3) {    // www.xxx.com.cn
+            if (len > 3) {
+                // www.xxx.com.cn
                 domainName = "." + domains[len - 3] + "." + domains[len - 2] + "." + domains[len - 1];
-            } else if (len <= 3 && len > 1) {    // xxx.com or xxx.cn
+            } else if (len <= 3 && len > 1) {
+                // xxx.com or xxx.cn
                 domainName = "." + domains[len - 2] + "." + domains[len - 1];
             } else {
                 domainName = serverName;
