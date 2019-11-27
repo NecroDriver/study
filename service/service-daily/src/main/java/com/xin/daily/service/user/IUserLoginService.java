@@ -1,6 +1,7 @@
 package com.xin.daily.service.user;
 
 import com.xin.web.pojo.Context;
+import com.xin.web.vo.UserVo;
 
 /**
  * 用户登录service
@@ -32,5 +33,21 @@ public interface IUserLoginService {
      * @param password 密码
      * @return 结果
      */
-    boolean login(Context context, String account, String password);
+    UserVo login(Context context, String account, String password);
+
+    /**
+     * 获取当前登录信息
+     *
+     * @param context 上下文
+     * @return 用户信息
+     */
+    UserVo getUserInfo(Context context);
+
+    /**
+     * 登出
+     *
+     * @param context 上下文
+     * @return 结果
+     */
+    boolean loginOut(Context context);
 }

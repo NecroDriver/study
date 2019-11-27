@@ -5,10 +5,12 @@ import com.xin.daily.entity.UserLogin;
 import com.xin.daily.service.user.IUserLoginService;
 import com.xin.redis.util.RedisUtils;
 import com.xin.web.base.BaseService;
+import com.xin.web.consts.CookieConst;
 import com.xin.web.consts.RedisConst;
 import com.xin.web.pojo.Context;
 import com.xin.web.utils.convert.ConvertUtils;
 import com.xin.web.utils.convert.JsonUtils;
+import com.xin.web.utils.cookie.CookieUtils;
 import com.xin.web.utils.crypt.SnowFlake;
 import com.xin.web.vo.UserVo;
 import org.mindrot.jbcrypt.BCrypt;
@@ -84,10 +86,10 @@ public class UserLoginServiceImpl extends BaseService implements IUserLoginServi
         userLogin.setPlatform("study");
         userLogin.setCreateTime(nowDate);
         userLogin.setCreator(username);
-        userLogin.setCreatorIp("");
+        userLogin.setCreatorIp(context.getRequest().getRemoteAddr());
         userLogin.setModifyTime(nowDate);
         userLogin.setModifier(username);
-        userLogin.setModifierIp("");
+        userLogin.setModifierIp(context.getRequest().getRemoteAddr());
         int num = userLoginMapper.insert(userLogin);
 
         /*----------------------------------- 日志记录 -----------------------------------*/
@@ -106,7 +108,7 @@ public class UserLoginServiceImpl extends BaseService implements IUserLoginServi
      * @return 结果
      */
     @Override
-    public boolean login(Context context, String account, String password) {
+    public UserVo login(Context context, String account, String password) {
 
         /*----------------------------------- 日志记录 -----------------------------------*/
         logger.debug("登录，账户：{}，密码：{}", account, password);
@@ -114,6 +116,7 @@ public class UserLoginServiceImpl extends BaseService implements IUserLoginServi
         /*----------------------------------- 参数校验 -----------------------------------*/
         Assert.notNull(account, "账户不能为空！");
         Assert.notNull(password, "密码不能为空！");
+        UserVo userVo;
 
         /*----------------------------------- 业务处理 -----------------------------------*/
         // 查询账户
@@ -126,15 +129,78 @@ public class UserLoginServiceImpl extends BaseService implements IUserLoginServi
             // 生成token
             String token = UUID.randomUUID().toString();
             // 转化vo
-            UserVo userVo = ConvertUtils.convert(userLogin, UserVo.class);
+            userVo = ConvertUtils.convert(userLogin, UserVo.class);
+            Assert.notNull(userVo.getAccount(), "用户信息转换错误！");
             // 存入redis，过期时间1小时
             redisUtils.set(RedisConst.USER_LOGIN_KEY + token, JsonUtils.toJson(userVo), 3600);
+            // 添加写 cookie 的逻辑，cookie 的有效期是关闭浏览器就失效。
+            CookieUtils.setCookie(context.getRequest(), context.getResponse(), CookieConst.USER_TOKEN, token);
+        } else {
+            throw new IllegalArgumentException("账号或密码不正确!");
         }
 
         /*----------------------------------- 日志记录 -----------------------------------*/
-        logger.debug("登录结束！结果：{}", result);
+        logger.debug("登录成功！结果：{}", JsonUtils.toJson(userVo));
 
         /*----------------------------------- 方法返回 -----------------------------------*/
-        return result;
+        return userVo;
+    }
+
+    /**
+     * 获取当前登录信息
+     *
+     * @param context 上下文
+     * @return 用户信息
+     */
+    @Override
+    public UserVo getUserInfo(Context context) {
+
+        /*----------------------------------- 日志记录 -----------------------------------*/
+        logger.debug("获取当前登录信息");
+
+        /*----------------------------------- 业务处理 -----------------------------------*/
+        // 从cookie中获取用户token
+        String token = CookieUtils.getCookieValue(context.getRequest(), CookieConst.USER_TOKEN);
+        Assert.notNull(token, "当前无登录用户！");
+        // 从redis中获取用户信息
+        Object userJson = redisUtils.get(RedisConst.USER_LOGIN_KEY + token);
+        Assert.notNull(userJson, "未查询到登录信息！");
+        // 转换
+        UserVo userVo = JsonUtils.fromJson(userJson.toString(), UserVo.class);
+        Assert.notNull(userVo, "用户信息转换错误！");
+
+        /*----------------------------------- 日志记录 -----------------------------------*/
+        logger.debug("获取当前登录信息成功！结果：{}", userJson.toString());
+
+        /*----------------------------------- 方法返回 -----------------------------------*/
+        return userVo;
+    }
+
+    /**
+     * 登出
+     *
+     * @param context 上下文
+     * @return 结果
+     */
+    @Override
+    public boolean loginOut(Context context) {
+
+        /*----------------------------------- 日志记录 -----------------------------------*/
+        logger.debug("登出");
+
+        /*----------------------------------- 业务处理 -----------------------------------*/
+        // 从cookie中获取用户token
+        String token = CookieUtils.getCookieValue(context.getRequest(), CookieConst.USER_TOKEN);
+        Assert.notNull(token, "当前无登录用户！");
+        // redis删除记录
+        redisUtils.del(RedisConst.USER_LOGIN_KEY + token);
+        // cookie删除记录
+        CookieUtils.deleteCookie(context.getRequest(), context.getResponse(), CookieConst.USER_TOKEN);
+
+        /*----------------------------------- 日志记录 -----------------------------------*/
+        logger.debug("登出成功！token：{}", token);
+
+        /*----------------------------------- 方法返回 -----------------------------------*/
+        return true;
     }
 }

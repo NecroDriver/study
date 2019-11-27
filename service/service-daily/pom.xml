@@ -69,12 +69,6 @@
             <groupId>com.xin</groupId>
             <artifactId>swagger-spring-boot-starter</artifactId>
             <version>0.0.3-SNAPSHOT</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-starter-web</artifactId>
-                </exclusion>
-            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.xin</groupId>

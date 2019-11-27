@@ -9,7 +9,6 @@
         <result column="username" jdbcType="VARCHAR" property="username"/>
         <result column="user_code" jdbcType="VARCHAR" property="userCode"/>
         <result column="encrypt_password" jdbcType="VARCHAR" property="encryptPassword"/>
-        <result column="salt" jdbcType="VARCHAR" property="salt"/>
         <result column="phone" jdbcType="VARCHAR" property="phone"/>
         <result column="email" jdbcType="VARCHAR" property="email"/>
         <result column="platform" jdbcType="VARCHAR" property="platform"/>
@@ -22,7 +21,7 @@
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, account, username, user_code, encrypt_password, salt, phone, email, platform,
+        id, account, username, user_code, encrypt_password, phone, email, platform,
         create_time, creator, creator_ip, modify_time, modifier, modifier_ip
     </sql>
     <select id="selectByAccount" parameterType="java.lang.String" resultMap="BaseResultMap">
@@ -41,15 +40,15 @@
             useGeneratedKeys="true">
         <!--@mbg.generated-->
         insert into study.user_login (account, username, user_code,
-        encrypt_password, salt, phone,
+        encrypt_password, phone,
         email, platform, create_time,
         creator, creator_ip, modify_time,
         modifier, modifier_ip)
         values (#{account,jdbcType=VARCHAR}, #{username,jdbcType=VARCHAR}, #{userCode,jdbcType=VARCHAR},
-        #{encryptPassword,jdbcType=VARCHAR}, #{salt,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR},
-        #{email,jdbcType=VARCHAR}, #{platform,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
-        #{creator,jdbcType=VARCHAR}, #{creatorIp,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP},
-        #{modifier,jdbcType=VARCHAR}, #{modifierIp,jdbcType=VARCHAR})
+        #{encryptPassword,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, #{email,jdbcType=VARCHAR},
+        #{platform,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR},
+        #{creatorIp,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP}, #{modifier,jdbcType=VARCHAR},
+        #{modifierIp,jdbcType=VARCHAR})
     </insert>
     <insert id="insertSelective" keyColumn="id" keyProperty="id" parameterType="com.xin.daily.entity.UserLogin"
             useGeneratedKeys="true">
@@ -67,9 +66,6 @@
             </if>
             <if test="encryptPassword != null">
                 encrypt_password,
-            </if>
-            <if test="salt != null">
-                salt,
             </if>
             <if test="phone != null">
                 phone,
@@ -111,9 +107,6 @@
             </if>
             <if test="encryptPassword != null">
                 #{encryptPassword,jdbcType=VARCHAR},
-            </if>
-            <if test="salt != null">
-                #{salt,jdbcType=VARCHAR},
             </if>
             <if test="phone != null">
                 #{phone,jdbcType=VARCHAR},
@@ -160,9 +153,6 @@
             <if test="encryptPassword != null">
                 encrypt_password = #{encryptPassword,jdbcType=VARCHAR},
             </if>
-            <if test="salt != null">
-                salt = #{salt,jdbcType=VARCHAR},
-            </if>
             <if test="phone != null">
                 phone = #{phone,jdbcType=VARCHAR},
             </if>
@@ -200,7 +190,6 @@
         username = #{username,jdbcType=VARCHAR},
         user_code = #{userCode,jdbcType=VARCHAR},
         encrypt_password = #{encryptPassword,jdbcType=VARCHAR},
-        salt = #{salt,jdbcType=VARCHAR},
         phone = #{phone,jdbcType=VARCHAR},
         email = #{email,jdbcType=VARCHAR},
         platform = #{platform,jdbcType=VARCHAR},
