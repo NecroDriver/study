@@ -5,9 +5,6 @@ import org.springframework.boot.autoconfigure.condition.ConditionalOnClass;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.config.annotation.CorsRegistry;
-import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurationSupport;
 import springfox.documentation.builders.ApiInfoBuilder;
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
@@ -28,7 +25,7 @@ import springfox.documentation.spring.web.plugins.Docket;
 @ConditionalOnClass(Docket.class)
 @EnableConfigurationProperties(Swagger2Properties.class)
 @Configuration
-public class Swagger2AutoConfiguration extends WebMvcConfigurationSupport {
+public class Swagger2AutoConfiguration {
 
     private final Swagger2Properties swagger2Properties;
 
@@ -66,28 +63,5 @@ public class Swagger2AutoConfiguration extends WebMvcConfigurationSupport {
                 //更新此API的许可证Url
                 .licenseUrl(swagger2Properties.getLicenseUrl())
                 .build();
-    }
-
-    /**
-     * 静态资源配置(默认)
-     */
-    @Override
-    public void addResourceHandlers(ResourceHandlerRegistry registry) {
-        // 静态资源路径
-        registry.addResourceHandler(swagger2Properties.getBasePath()).addResourceLocations("classpath:/static/");
-        registry.addResourceHandler("swagger-ui.html").addResourceLocations("classpath:/META-INF/resources/");
-        registry.addResourceHandler("webjars/**").addResourceLocations("classpath:/META-INF/resources/webjars/");
-        super.addResourceHandlers(registry);
-    }
-
-    /**
-     * 解决跨域问题
-     */
-    @Override
-    public void addCorsMappings(CorsRegistry registry) {
-        registry.addMapping("/**")
-                .allowedOrigins("*")
-                .allowedMethods("GET", "POST", "PUT", "OPTIONS", "DELETE", "PATCH")
-                .allowCredentials(true).maxAge(3600);
     }
 }
