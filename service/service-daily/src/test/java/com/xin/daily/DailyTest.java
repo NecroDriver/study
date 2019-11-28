@@ -1,9 +1,5 @@
 package com.xin.daily;
 
-import com.xin.daily.entity.UserLogin;
-import com.xin.web.utils.convert.ConvertUtils;
-import com.xin.web.utils.convert.JsonUtils;
-import com.xin.web.vo.UserVo;
 import org.springframework.util.Assert;
 
 /**

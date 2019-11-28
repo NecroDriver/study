@@ -1,15 +1,15 @@
-package com.xin.daily.dao;
+package com.xin.daily.dao.novel;
 
-import com.xin.daily.entity.UserLogin;
+import com.xin.daily.entity.novel.Novel;
 import org.apache.ibatis.annotations.Mapper;
 
 /**
- * @author creator mafh 2019/11/15 15:04
+ * @author creator mafh 2019/11/28 17:56
  * @author updater
  * @version 1.0.0
  */
 @Mapper
-public interface UserLoginMapper {
+public interface NovelMapper {
     /**
      * delete by primary key
      *
@@ -24,7 +24,7 @@ public interface UserLoginMapper {
      * @param record the record
      * @return insert count
      */
-    int insert(UserLogin record);
+    int insert(Novel record);
 
     /**
      * insert record to table selective
@@ -32,7 +32,7 @@ public interface UserLoginMapper {
      * @param record the record
      * @return insert count
      */
-    int insertSelective(UserLogin record);
+    int insertSelective(Novel record);
 
     /**
      * update record
@@ -40,7 +40,7 @@ public interface UserLoginMapper {
      * @param record the updated record
      * @return update count
      */
-    int updateByPrimaryKeySelective(UserLogin record);
+    int updateByPrimaryKeySelective(Novel record);
 
     /**
      * update record selective
@@ -48,13 +48,13 @@ public interface UserLoginMapper {
      * @param record the updated record
      * @return update count
      */
-    int updateByPrimaryKey(UserLogin record);
+    int updateByPrimaryKey(Novel record);
 
     /**
-     * 根据账户查询用户信息
+     * 根据小说名称查询小说
      *
-     * @param account 账户
-     * @return 结果
+     * @param novelName 小说名称
+     * @return 小说对象
      */
-    UserLogin selectByAccount(String account);
+    Novel selectByNovelName(String novelName);
 }

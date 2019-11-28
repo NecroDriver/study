@@ -1,4 +1,4 @@
-package com.xin.daily.entity;
+package com.xin.daily.entity.novel;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -7,60 +7,45 @@ import java.util.Date;
 import lombok.Data;
 
 /**
- * @author creator mafh 2019/11/15 15:04
+ * @author creator mafh 2019/11/28 17:56
  * @author updater
  * @version 1.0.0
  */
-@ApiModel(value = "com-xin-daily-entity-UserLogin")
+@ApiModel(value = "com-xin-daily-entity-novel-NovelChapter")
 @Data
-public class UserLogin implements Serializable {
-    /**
-     * 主键id
-     */
-    @ApiModelProperty(value = "主键id")
+public class NovelChapter implements Serializable {
+    @ApiModelProperty(value = "null")
     private Integer id;
 
     /**
-     * 登录账户
+     * 小说编号
      */
-    @ApiModelProperty(value = "登录账户")
-    private String account;
+    @ApiModelProperty(value = "小说编号")
+    private String novelCode;
 
     /**
-     * 用户名
+     * 章节名称
      */
-    @ApiModelProperty(value = "用户名")
-    private String username;
+    @ApiModelProperty(value = "章节名称")
+    private String chapterName;
 
     /**
-     * 用户编号
+     * 章节地址
      */
-    @ApiModelProperty(value = "用户编号")
-    private String userCode;
+    @ApiModelProperty(value = "章节地址")
+    private String url;
 
     /**
-     * 加密密码
+     * 显示顺序
      */
-    @ApiModelProperty(value = "加密密码")
-    private String encryptPassword;
+    @ApiModelProperty(value = "显示顺序")
+    private Integer displayOrder;
 
     /**
-     * 手机号
+     * 是否删除 0否1是
      */
-    @ApiModelProperty(value = "手机号")
-    private String phone;
-
-    /**
-     * 邮箱
-     */
-    @ApiModelProperty(value = "邮箱")
-    private String email;
-
-    /**
-     * 平台
-     */
-    @ApiModelProperty(value = "平台")
-    private String platform;
+    @ApiModelProperty(value = "是否删除 0否1是")
+    private Byte flagDelete;
 
     /**
      * 创建时间
@@ -97,6 +82,12 @@ public class UserLogin implements Serializable {
      */
     @ApiModelProperty(value = "修改人ip")
     private String modifierIp;
+
+    /**
+     * 章节内容
+     */
+    @ApiModelProperty(value = "章节内容")
+    private String content;
 
     private static final long serialVersionUID = 1L;
 }

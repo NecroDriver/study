@@ -29,6 +29,7 @@ CREATE TABLE `novel_chapter`
     `url`           varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '章节地址',
     `content`       text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci         NOT NULL COMMENT '章节内容',
     `display_order` int(11)                                                       NOT NULL DEFAULT 0 COMMENT '显示顺序',
+    `flag_delete`   tinyint(4)                                                    NOT NULL DEFAULT 0 COMMENT '是否删除，0：否 1：是',
     `create_time`   datetime(0)                                                   NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '创建时间',
     `creator`       varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL DEFAULT '' COMMENT '创建人',
     `creator_ip`    varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL DEFAULT '' COMMENT '创建人ip',

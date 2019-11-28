@@ -31,6 +31,7 @@ CREATE TABLE `user_login`
     `phone`            varchar(17) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '手机号',
     `email`            varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '邮箱',
     `platform`         varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '平台',
+    `flag_delete`      tinyint(4)                                                   NOT NULL DEFAULT 0 COMMENT '是否删除，0：否 1：是',
     `create_time`      datetime(0)                                                  NOT NULL DEFAULT '2000-01-01 00:00:00' COMMENT '创建时间',
     `creator`          varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '创建人',
     `creator_ip`       varchar(25) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '创建人ip',

@@ -1,25 +1,26 @@
-package com.xin.daily.common.interceptor;
+package com.xin.daily.common.mvc;
 
 import com.xin.redis.util.RedisUtils;
 import com.xin.web.consts.CookieConst;
 import com.xin.web.consts.RedisConst;
 import com.xin.web.interceptor.InitHandlerInterceptorAdapter;
+import com.xin.web.pojo.Context;
 import com.xin.web.utils.convert.JsonUtils;
 import com.xin.web.utils.cookie.CookieUtils;
 import com.xin.web.vo.ResultVo;
+import com.xin.web.vo.UserVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
-import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -29,8 +30,8 @@ import java.util.Map;
  * @author updater
  * @version 1.0.0
  */
-@Configuration
-public class MvcInterceptor extends InitHandlerInterceptorAdapter implements WebMvcConfigurer {
+@Component
+public class MvcInterceptor extends InitHandlerInterceptorAdapter {
 
     private Logger logger = LoggerFactory.getLogger(MvcInterceptor.class);
 
@@ -51,18 +52,20 @@ public class MvcInterceptor extends InitHandlerInterceptorAdapter implements Web
             // 从redis中获取用户信息
             Object userJson = redisUtils.get(RedisConst.USER_LOGIN_KEY + token);
             if (!ObjectUtils.isEmpty(userJson)) {
-                // 验证登录信息
+                // 登录信息赋值
+                UserVo userVo = JsonUtils.fromJson(userJson.toString(), UserVo.class);
+                Context context = new Context();
+                context.setUser(userVo);
+                request.setAttribute("context", context);
                 return true;
             }
         }
-        String isAjax = request.getParameter("isAjax");
-        //ajax请求
         PrintWriter out = null;
         try {
             response.setCharacterEncoding("UTF-8");
             response.setContentType("application/json;charset=utf-8");
             out = response.getWriter();
-            Map data = new HashMap<>();
+            Map<String, Object> data = new HashMap<>();
             data.put("loginUrl", "");
             ResultVo result = ResultVo.failureVo("未授权，被拦截", data);
             out.print(JsonUtils.toJson(result));
@@ -78,8 +81,13 @@ public class MvcInterceptor extends InitHandlerInterceptorAdapter implements Web
         return false;
     }
 
+    /**
+     * 排除的规则
+     */
     @Override
-    public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(this).addPathPatterns(getPathPatterns()).excludePathPatterns(getExcludePathPatterns());
+    public List<String> getExcludePathPatterns() {
+        List<String> list = super.getExcludePathPatterns();
+        list.add("/**/public/**");
+        return list;
     }
 }

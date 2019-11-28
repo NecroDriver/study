@@ -1,7 +1,8 @@
 package com.xin.daily.service.user.impl;
 
-import com.xin.daily.dao.UserLoginMapper;
-import com.xin.daily.entity.UserLogin;
+import com.xin.daily.common.consts.CommonConst;
+import com.xin.daily.dao.user.UserLoginMapper;
+import com.xin.daily.entity.user.UserLogin;
 import com.xin.daily.service.user.IUserLoginService;
 import com.xin.redis.util.RedisUtils;
 import com.xin.web.base.BaseService;
@@ -84,6 +85,7 @@ public class UserLoginServiceImpl extends BaseService implements IUserLoginServi
         userLogin.setPhone(phone);
         userLogin.setEmail(email);
         userLogin.setPlatform("study");
+        userLogin.setFlagDelete(CommonConst.FLAG_DELETE_NO);
         userLogin.setCreateTime(nowDate);
         userLogin.setCreator(username);
         userLogin.setCreatorIp(context.getRequest().getRemoteAddr());
