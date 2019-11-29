@@ -26,7 +26,7 @@ import java.util.List;
  * @author updater
  * @version 1.0.0
  */
-public abstract class InitHandlerInterceptorAdapter extends HandlerInterceptorAdapter {
+public abstract class BaseHandlerInterceptorAdapter extends HandlerInterceptorAdapter {
 
     /**
      * 拦截器的执行顺序
