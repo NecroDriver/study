@@ -3,14 +3,18 @@ package com.xin.daily.common.mvc;
 import com.xin.redis.util.RedisUtils;
 import com.xin.web.consts.CookieConst;
 import com.xin.web.consts.RedisConst;
-import com.xin.web.interceptor.InitHandlerInterceptorAdapter;
+import com.xin.web.interceptor.BaseHandlerInterceptorAdapter;
 import com.xin.web.pojo.Context;
+import com.xin.web.pojo.UrlRule;
 import com.xin.web.utils.convert.JsonUtils;
 import com.xin.web.utils.cookie.CookieUtils;
+import com.xin.web.utils.filter.FilterUtils;
+import com.xin.web.utils.filter.IUrlFilter;
 import com.xin.web.vo.ResultVo;
 import com.xin.web.vo.UserVo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Component;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
@@ -19,6 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -31,21 +36,35 @@ import java.util.Map;
  * @version 1.0.0
  */
 @Component
-public class MvcInterceptor extends InitHandlerInterceptorAdapter {
+public class MvcInterceptor extends BaseHandlerInterceptorAdapter implements IUrlFilter {
 
     private Logger logger = LoggerFactory.getLogger(MvcInterceptor.class);
 
+    /**
+     * 应用上下文
+     */
+    private ApplicationContext applicationContext;
     /**
      * redis工具类
      */
     private RedisUtils redisUtils;
 
-    public MvcInterceptor(RedisUtils redisUtils) {
+    public MvcInterceptor(ApplicationContext applicationContext, RedisUtils redisUtils) {
+        this.applicationContext = applicationContext;
         this.redisUtils = redisUtils;
     }
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        // 封装前置信息
+        Context context = new Context();
+        context.setRequest(request);
+        context.setResponse(response);
+        // 验证url
+        if (FilterUtils.filterUrl(applicationContext, request)) {
+            request.setAttribute("context", context);
+            return true;
+        }
         // 从cookie获取token
         String token = CookieUtils.getCookieValue(request, CookieConst.USER_TOKEN);
         if (!StringUtils.isEmpty(token)) {
@@ -54,7 +73,6 @@ public class MvcInterceptor extends InitHandlerInterceptorAdapter {
             if (!ObjectUtils.isEmpty(userJson)) {
                 // 登录信息赋值
                 UserVo userVo = JsonUtils.fromJson(userJson.toString(), UserVo.class);
-                Context context = new Context();
                 context.setUser(userVo);
                 request.setAttribute("context", context);
                 return true;
@@ -87,7 +105,19 @@ public class MvcInterceptor extends InitHandlerInterceptorAdapter {
     @Override
     public List<String> getExcludePathPatterns() {
         List<String> list = super.getExcludePathPatterns();
-        list.add("/**/public/**");
+        list.add("/error");
+        return list;
+    }
+
+    /**
+     * 过滤的规则
+     *
+     * @return 列表
+     */
+    @Override
+    public List<UrlRule> getUrlRuleList() {
+        List<UrlRule> list = new ArrayList<>();
+        list.add(new UrlRule("/public", UrlRule.Rule.contains));
         return list;
     }
 }

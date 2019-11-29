@@ -20,7 +20,7 @@ spring:
 #mybatis
 mybatis:
   #  mybatis的数据库映射地址
-  mapper-locations: classpath:mapper/*Mapper.xml
+  mapper-locations: classpath:mapper/*/*Mapper.xml
   #  实体类地址
   type-aliases-package: com.xin.daily.entity
 
