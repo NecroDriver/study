@@ -1,10 +1,6 @@
 package com.xin.web.pojo;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreType;
 import com.xin.web.vo.UserVo;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -25,11 +21,11 @@ public class Context {
     /**
      * 请求信息
      */
-    private HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
+    private HttpServletRequest request;
     /**
      * 响应信息
      */
-    private HttpServletResponse response = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getResponse();
+    private HttpServletResponse response;
 
     public UserVo getUser() {
         return user;
@@ -37,6 +33,14 @@ public class Context {
 
     public void setUser(UserVo user) {
         this.user = user;
+    }
+
+    public void setRequest(HttpServletRequest request) {
+        this.request = request;
+    }
+
+    public void setResponse(HttpServletResponse response) {
+        this.response = response;
     }
 
     public HttpServletRequest getRequest() {
