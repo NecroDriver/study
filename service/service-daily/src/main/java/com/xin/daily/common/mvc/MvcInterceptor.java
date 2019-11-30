@@ -56,13 +56,8 @@ public class MvcInterceptor extends BaseHandlerInterceptorAdapter implements IUr
 
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
-        // 封装前置信息
-        Context context = new Context();
-        context.setRequest(request);
-        context.setResponse(response);
         // 验证url
         if (FilterUtils.filterUrl(applicationContext, request)) {
-            request.setAttribute("context", context);
             return true;
         }
         // 从cookie获取token
@@ -72,9 +67,6 @@ public class MvcInterceptor extends BaseHandlerInterceptorAdapter implements IUr
             Object userJson = redisUtils.get(RedisConst.USER_LOGIN_KEY + token);
             if (!ObjectUtils.isEmpty(userJson)) {
                 // 登录信息赋值
-                UserVo userVo = JsonUtils.fromJson(userJson.toString(), UserVo.class);
-                context.setUser(userVo);
-                request.setAttribute("context", context);
                 return true;
             }
         }

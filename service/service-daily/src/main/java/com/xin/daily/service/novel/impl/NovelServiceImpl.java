@@ -60,7 +60,7 @@ public class NovelServiceImpl extends BaseService implements INovelService {
 
         /*-----------------------------业务处理-----------------------------*/
         // 判别小说名称是否重复
-        Assert.notNull(novelMapper.selectByNovelName(novelName), "小说名称已存在！");
+        Assert.isNull(novelMapper.selectByNovelName(novelName), "小说名称已存在！");
         Novel novel = new Novel();
         novel.setNovelName(novelName);
         SnowFlake snowFlake = new SnowFlake(2, 1);

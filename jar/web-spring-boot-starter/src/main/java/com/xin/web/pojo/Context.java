@@ -4,6 +4,7 @@ import com.xin.web.vo.UserVo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.Serializable;
 
 /**
  * 上下文
@@ -12,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  * @author updater
  * @version 1.0.0
  */
-public class Context {
+public class Context implements Serializable {
 
     /**
      * 用户信息
