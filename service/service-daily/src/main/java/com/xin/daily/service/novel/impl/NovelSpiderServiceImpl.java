@@ -80,15 +80,16 @@ public class NovelSpiderServiceImpl extends BaseService implements INovelSpiderS
             List<NovelChapter> novelChapterList = JsoupUtils.getDocumentList(novel.getUrl(), novelDocumentAnalyzer, NovelChapter.class);
             for (int i = 0; i < novelChapterList.size(); i++) {
                 NovelChapter novelChapter = novelChapterList.get(i);
+                // 获取章节地址
+                String url = novel.getUrl() + "/" + novelChapter.getUrl();
+                novelChapter.setUrl(url);
                 try {
-                    // 获取章节地址
-                    String url = novel.getUrl() + "/" + novelChapter.getUrl();
-                    novelChapter.setUrl(url);
                     // 获取章节内容
                     Map<String, Object> contentMap = JsoupUtils.getDocumentMap(url, novelDocumentAnalyzer);
                     novelChapter.setContent(contentMap.get("content") + "");
                     Thread.sleep(500);
                 } catch (Exception e) {
+                    novelChapter.setContent("");
                     logger.error("解析html章节详情异常，错误：{}", e.getMessage());
                 }
                 novelChapter.setNovelCode(novelCode);
@@ -103,6 +104,7 @@ public class NovelSpiderServiceImpl extends BaseService implements INovelSpiderS
                 // 获取比例
                 int percent = (i + 1) * 100 / novelChapterList.size();
                 // websocket发送实时转换进度 todo
+                logger.info("已加载" + percent + "%");
             }
             // 数据存入数据库
             results = mybatisUtils.batchInsert(novelChapterList, "com.xin.daily.dao.novel.NovelChapterMapper.insert", 1000);
