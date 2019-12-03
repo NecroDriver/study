@@ -81,8 +81,11 @@ public class NovelSpiderServiceImpl extends BaseService implements INovelSpiderS
             for (int i = 0; i < novelChapterList.size(); i++) {
                 NovelChapter novelChapter = novelChapterList.get(i);
                 try {
+                    // 获取章节地址
+                    String url = novel.getUrl() + novelChapter.getUrl();
+                    novelChapter.setUrl(url);
                     // 获取章节内容
-                    Map<String, Object> contentMap = JsoupUtils.getDocumentMap(novelChapter.getUrl(), novelDocumentAnalyzer);
+                    Map<String, Object> contentMap = JsoupUtils.getDocumentMap(url, novelDocumentAnalyzer);
                     novelChapter.setContent(contentMap.get("content") + "");
                     Thread.sleep(500);
                 } catch (Exception e) {

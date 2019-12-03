@@ -6,6 +6,7 @@ import com.xin.web.pojo.Context;
 import com.xin.web.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -33,7 +34,7 @@ public class NovelSpiderController extends BaseController {
      * @param novelCode 小说编号
      * @return 结果
      */
-    @RequestMapping("/spider/list/{novelCode}")
+    @PostMapping("/spider/list/{novelCode}")
     public ResultVo spiderNovelList(Context context, @PathVariable String novelCode) {
         Integer num = novelSpiderService.spiderNovelList(context, novelCode);
         return ResultVo.newResultVo(num > 0, num, "抓取小说列表");
