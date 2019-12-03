@@ -1,7 +1,10 @@
 package com.xin.daily.dao.novel;
 
 import com.xin.daily.entity.novel.Novel;
+import com.xin.daily.entity.novel.NovelChapter;
 import org.apache.ibatis.annotations.Mapper;
+
+import java.util.List;
 
 /**
  * @author creator mafh 2019/11/28 17:56
@@ -57,4 +60,12 @@ public interface NovelMapper {
      * @return 小说对象
      */
     Novel selectByNovelName(String novelName);
+
+    /**
+     * 根据小说编号查询小说
+     *
+     * @param novelCode 小说编号
+     * @return 小说对象
+     */
+    Novel selectByNovelCode(String novelCode);
 }

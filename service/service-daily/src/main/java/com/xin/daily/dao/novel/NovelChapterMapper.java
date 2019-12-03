@@ -3,6 +3,8 @@ package com.xin.daily.dao.novel;
 import com.xin.daily.entity.novel.NovelChapter;
 import org.apache.ibatis.annotations.Mapper;
 
+import java.util.List;
+
 /**
  * @author creator mafh 2019/11/28 17:56
  * @author updater
@@ -59,4 +61,13 @@ public interface NovelChapterMapper {
      * @return update count
      */
     int updateByPrimaryKey(NovelChapter record);
+
+
+    /**
+     * 批量插入记录
+     *
+     * @param novelChapterList 实体列表
+     * @return 插入数量
+     */
+    Integer batchInsert(List<NovelChapter> novelChapterList);
 }
