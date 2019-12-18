@@ -5,7 +5,6 @@ import com.alibaba.druid.support.http.StatViewServlet;
 import com.alibaba.druid.support.http.WebStatFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.boot.web.servlet.ServletRegistrationBean;
@@ -15,7 +14,7 @@ import org.springframework.context.annotation.Primary;
 
 import javax.servlet.Servlet;
 import javax.sql.DataSource;
-import java.util.Arrays;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -94,7 +93,7 @@ public class DruidAutoConfiguration {
         logger.info("==== init filter registration ====");
         FilterRegistrationBean<WebStatFilter> filterRegistrationBean = new FilterRegistrationBean<>();
         filterRegistrationBean.setFilter(new WebStatFilter());
-        filterRegistrationBean.setUrlPatterns(Arrays.asList(druidProperties.getWebStatFilter().getUrlPattern()));
+        filterRegistrationBean.setUrlPatterns(Collections.singletonList(druidProperties.getWebStatFilter().getUrlPattern()));
         Map<String, String> initParam = new HashMap<>();
         initParam.put("exclusions", druidProperties.getWebStatFilter().getExclusions());
         filterRegistrationBean.setInitParameters(initParam);

@@ -1,11 +1,15 @@
 package com.xin.daily.service.novel.impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
 import com.xin.daily.common.consts.CommonConst;
 import com.xin.daily.dao.novel.NovelMapper;
 import com.xin.daily.entity.novel.Novel;
 import com.xin.daily.service.novel.INovelService;
+import com.xin.daily.vo.NovelVo;
 import com.xin.web.base.BaseService;
 import com.xin.web.pojo.Context;
+import com.xin.web.pojo.Pageable;
 import com.xin.web.utils.crypt.SnowFlake;
 import com.xin.web.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,6 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 小说service实现类
@@ -85,5 +90,33 @@ public class NovelServiceImpl extends BaseService implements INovelService {
 
         /*-----------------------------方法返回-----------------------------*/
         return num;
+    }
+
+    /**
+     * 获取小说分页
+     *
+     * @param context   上下文
+     * @param orderType 排序类型
+     * @param pageable  分页对象
+     * @return 分页数据
+     */
+    @Override
+    public Page<NovelVo> getNovelPage(Context context, Integer orderType, Pageable pageable) {
+
+        /*--------------------------------日志记录------------------------------------*/
+        logger.debug("获取小说分页，排序类型：{}", orderType);
+
+        /*--------------------------------参数校验------------------------------------*/
+
+
+        /*--------------------------------业务处理------------------------------------*/
+        PageHelper.startPage(pageable.getPageNo(), pageable.getPageSize());
+        List<NovelVo> novelVoList = novelMapper.selectListByOrderType(orderType);
+
+        /*--------------------------------日志记录------------------------------------*/
+        logger.debug("获取小说分页");
+
+        /*--------------------------------方法返回------------------------------------*/
+        return (Page) novelVoList;
     }
 }

@@ -2,7 +2,9 @@ package com.xin.daily.dao.novel;
 
 import com.xin.daily.entity.novel.Novel;
 import com.xin.daily.entity.novel.NovelChapter;
+import com.xin.daily.vo.NovelVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -68,4 +70,12 @@ public interface NovelMapper {
      * @return 小说对象
      */
     Novel selectByNovelCode(String novelCode);
+
+    /**
+     * 查询小说列表
+     *
+     * @param orderType 排序类型
+     * @return 列表
+     */
+    List<NovelVo> selectListByOrderType(@Param("orderType") Integer orderType);
 }

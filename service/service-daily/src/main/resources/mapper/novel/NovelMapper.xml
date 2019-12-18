@@ -25,6 +25,26 @@
         id, novel_code, novel_name, description, url, cover_img, flag_delete, flag_update,
         flag_end, create_time, creator, creator_ip, modify_time, modifier, modifier_ip
     </sql>
+    <resultMap id="queryResultMap" type="com.xin.daily.entity.novel.Novel">
+        <result column="novel_code" jdbcType="VARCHAR" property="novelCode"/>
+        <result column="novel_name" jdbcType="VARCHAR" property="novelName"/>
+        <result column="description" jdbcType="VARCHAR" property="description"/>
+        <result column="url" jdbcType="VARCHAR" property="url"/>
+        <result column="cover_img" jdbcType="VARCHAR" property="coverImg"/>
+        <result column="flag_delete" jdbcType="TINYINT" property="flagDelete"/>
+        <result column="flag_update" jdbcType="TINYINT" property="flagUpdate"/>
+        <result column="flag_end" jdbcType="TINYINT" property="flagEnd"/>
+    </resultMap>
+    <sql id="query_column_list">
+            novel_code,
+            novel_name,
+            description,
+            url,
+            cover_img,
+            flag_delete,
+            flag_update,
+            flag_end
+    </sql>
     <select id="selectByNovelName" parameterType="java.lang.String" resultMap="BaseResultMap">
         <!--@mbg.generated-->
         select
@@ -218,5 +238,17 @@
         from study.novel
         where
         novel_code = #{novelCode,jdbcType=VARCHAR}
+    </select>
+    <select id="selectListByOrderType" resultType="com.xin.daily.vo.NovelVo">
+        select
+        <include refid="query_column_list"/>
+        from study.novel
+        where
+        flag_delete = 0
+        order by
+        <choose>
+            <when test="orderType == 0">novel_code desc</when>
+            <otherwise>,novel_code asc</otherwise>
+        </choose>
     </select>
 </mapper>

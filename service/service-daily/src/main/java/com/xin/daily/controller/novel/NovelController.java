@@ -1,8 +1,11 @@
 package com.xin.daily.controller.novel;
 
+import com.github.pagehelper.Page;
 import com.xin.daily.service.novel.INovelService;
+import com.xin.daily.vo.NovelVo;
 import com.xin.web.base.BaseController;
 import com.xin.web.pojo.Context;
+import com.xin.web.pojo.Pageable;
 import com.xin.web.vo.ResultVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -41,5 +44,19 @@ public class NovelController extends BaseController {
     public ResultVo saveNovelInfo(Context context, String novelName, String url, String coverImg, String description, Byte flagEnd) {
         int num = novelService.saveNovelInfo(context, novelName, url, coverImg, description, flagEnd);
         return ResultVo.newResultVo(num > 0, num, "小说保存");
+    }
+
+    /**
+     * 获取小说分页
+     *
+     * @param context   上下文
+     * @param orderType 排序类型
+     * @param pageable  分页对象
+     * @return 分页数据
+     */
+    @PostMapping("/public/getNovelPage")
+    public ResultVo getNovelPage(Context context, Integer orderType, Pageable pageable) {
+        Page<NovelVo> novelPage = novelService.getNovelPage(context, orderType, pageable);
+        return ResultVo.newResultVo(true, novelPage, "获取小说分页");
     }
 }

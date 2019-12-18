@@ -1,6 +1,9 @@
 package com.xin.daily.service.novel;
 
+import com.github.pagehelper.Page;
+import com.xin.daily.vo.NovelVo;
 import com.xin.web.pojo.Context;
+import com.xin.web.pojo.Pageable;
 
 /**
  * 小说service
@@ -23,4 +26,14 @@ public interface INovelService {
      * @return 结果
      */
     int saveNovelInfo(Context context, String novelName, String url, String coverImg, String description, Byte flagEnd);
+
+    /**
+     * 获取小说分页
+     *
+     * @param context   上下文
+     * @param orderType 排序类型
+     * @param pageable  分页对象
+     * @return 分页数据
+     */
+    Page<NovelVo> getNovelPage(Context context, Integer orderType, Pageable pageable);
 }
