@@ -20,5 +20,5 @@ public class Base {
      * @ Transient注解的成员变量不会被orm映射
      */
     @Transient
-    protected transient Logger logger = LoggerFactory.getLogger(getClass());
+    protected static transient Logger logger = LoggerFactory.getLogger(Base.class);
 }
