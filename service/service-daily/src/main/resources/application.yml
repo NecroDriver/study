@@ -6,7 +6,7 @@ spring:
   #数据库相关配置
   datasource:
     druid:
-      url: jdbc:mysql://localhost:3306/study?characterEncoding=UTF-8
+      url: jdbc:mysql://localhost:3306/study?characterEncoding=UTF-8&serverTimezone=Asia/Shanghai
       username: root
       password: password
       initial-size: 8
@@ -26,8 +26,11 @@ spring:
     allow-bean-definition-overriding: true
 #mybatis
 mybatis:
-  #  mybatis的数据库映射地址
+  # mybatis的数据库映射地址
   mapper-locations: classpath:mapper/*/*Mapper.xml
-  #  实体类地址
+  # 实体类地址
   type-aliases-package: com.xin.daily.entity
+  configuration:
+    # 开启驼峰匹配
+    map-underscore-to-camel-case: true
 

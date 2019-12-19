@@ -1,6 +1,6 @@
 package com.xin.daily.service.novel;
 
-import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import com.xin.daily.vo.NovelVo;
 import com.xin.web.pojo.Context;
 import com.xin.web.pojo.Pageable;
@@ -35,5 +35,5 @@ public interface INovelService {
      * @param pageable  分页对象
      * @return 分页数据
      */
-    Page<NovelVo> getNovelPage(Context context, Integer orderType, Pageable pageable);
+    PageInfo<NovelVo> getNovelPage(Context context, Integer orderType, Pageable pageable);
 }

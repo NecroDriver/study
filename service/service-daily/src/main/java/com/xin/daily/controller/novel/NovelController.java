@@ -1,6 +1,6 @@
 package com.xin.daily.controller.novel;
 
-import com.github.pagehelper.Page;
+import com.github.pagehelper.PageInfo;
 import com.xin.daily.service.novel.INovelService;
 import com.xin.daily.vo.NovelVo;
 import com.xin.web.base.BaseController;
@@ -56,7 +56,7 @@ public class NovelController extends BaseController {
      */
     @PostMapping("/public/getNovelPage")
     public ResultVo getNovelPage(Context context, Integer orderType, Pageable pageable) {
-        Page<NovelVo> novelPage = novelService.getNovelPage(context, orderType, pageable);
+        PageInfo<NovelVo> novelPage = novelService.getNovelPage(context, orderType, pageable);
         return ResultVo.newResultVo(true, novelPage, "获取小说分页");
     }
 }

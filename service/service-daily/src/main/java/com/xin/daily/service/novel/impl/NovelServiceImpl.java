@@ -1,7 +1,7 @@
 package com.xin.daily.service.novel.impl;
 
-import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
+import com.github.pagehelper.PageInfo;
 import com.xin.daily.common.consts.CommonConst;
 import com.xin.daily.dao.novel.NovelMapper;
 import com.xin.daily.entity.novel.Novel;
@@ -101,22 +101,23 @@ public class NovelServiceImpl extends BaseService implements INovelService {
      * @return 分页数据
      */
     @Override
-    public Page<NovelVo> getNovelPage(Context context, Integer orderType, Pageable pageable) {
+    public PageInfo<NovelVo> getNovelPage(Context context, Integer orderType, Pageable pageable) {
 
         /*--------------------------------日志记录------------------------------------*/
         logger.debug("获取小说分页，排序类型：{}", orderType);
 
         /*--------------------------------参数校验------------------------------------*/
-
+        String orderTypeStr = orderType.equals(0) ? "asc" : "desc";
 
         /*--------------------------------业务处理------------------------------------*/
         PageHelper.startPage(pageable.getPageNo(), pageable.getPageSize());
-        List<NovelVo> novelVoList = novelMapper.selectListByOrderType(orderType);
+        List<NovelVo> novelVoList = novelMapper.selectListByOrderType(orderTypeStr);
+        PageInfo<NovelVo> pageInfo = new PageInfo<>(novelVoList);
 
         /*--------------------------------日志记录------------------------------------*/
-        logger.debug("获取小说分页");
+        logger.debug("获取小说分页，记录数：{}", pageInfo.getTotal());
 
         /*--------------------------------方法返回------------------------------------*/
-        return (Page) novelVoList;
+        return pageInfo;
     }
 }

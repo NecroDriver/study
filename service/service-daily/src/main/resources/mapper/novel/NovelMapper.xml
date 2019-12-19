@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 ，为了使用接口动态代理，这里必须是接口的全路径名-->
 <mapper namespace="com.xin.daily.dao.novel.NovelMapper">
     <resultMap id="BaseResultMap" type="com.xin.daily.entity.novel.Novel">
         <!--@mbg.generated-->
@@ -25,7 +26,12 @@
         id, novel_code, novel_name, description, url, cover_img, flag_delete, flag_update,
         flag_end, create_time, creator, creator_ip, modify_time, modifier, modifier_ip
     </sql>
-    <resultMap id="queryResultMap" type="com.xin.daily.entity.novel.Novel">
+<!--
+    type:返回的结果集对应的java的实体类型
+    id:resultMap的唯一标识
+    autoMapping：默认完成映射，如果已开启驼峰匹配，可以解决驼峰匹配
+-->
+    <resultMap id="queryResultMap" type="com.xin.daily.vo.NovelVo">
         <result column="novel_code" jdbcType="VARCHAR" property="novelCode"/>
         <result column="novel_name" jdbcType="VARCHAR" property="novelName"/>
         <result column="description" jdbcType="VARCHAR" property="description"/>
@@ -45,6 +51,16 @@
             flag_update,
             flag_end
     </sql>
+<!--
+    1.#{},预编译的方式preparedStatement，使用占位符替换，防止sql注入，一个参数的时候，任意参数名可以接收
+    2.${},普通的Statement，字符串直接拼接，不可以防止sql注入，一个参数的时候，必须使用${value}接收参数
+-->
+<!--
+    statement，内容：sql语句。
+    id：唯一标识，随便写，在同一个命名空间下保持唯一，使用动态代理之后要求和方法名保持一致
+    resultType：sql语句查询结果集的封装类型，使用动态代理之后和方法的返回类型一致；resultMap：二选一
+    parameterType：参数的类型，使用动态代理之后和方法的参数类型一致
+-->
     <select id="selectByNovelName" parameterType="java.lang.String" resultMap="BaseResultMap">
         <!--@mbg.generated-->
         select
@@ -57,6 +73,11 @@
         delete from study.novel
         where id = #{id,jdbcType=INTEGER}
     </delete>
+<!--
+    useGeneratedKeys:开启主键回写
+    keyColumn：指定数据库的主键
+    keyProperty：主键对应的pojo属性名
+-->
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xin.daily.entity.novel.Novel"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
@@ -239,16 +260,13 @@
         where
         novel_code = #{novelCode,jdbcType=VARCHAR}
     </select>
-    <select id="selectListByOrderType" resultType="com.xin.daily.vo.NovelVo">
+    <select id="selectListByOrderType" resultMap="queryResultMap">
         select
         <include refid="query_column_list"/>
         from study.novel
         where
         flag_delete = 0
-        order by
-        <choose>
-            <when test="orderType == 0">novel_code desc</when>
-            <otherwise>,novel_code asc</otherwise>
-        </choose>
+        order by novel_code
+        <if test="orderType != null ">${orderType}</if>
     </select>
 </mapper>

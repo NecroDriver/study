@@ -9,6 +9,12 @@ import org.apache.ibatis.annotations.Param;
 import java.util.List;
 
 /**
+ * 动态代理总结
+ * 1.Mapper的namespace必须和mapper接口的全路径一致。
+ * 2.Mapper接口的方法名必须和sql定义的id一致
+ * 3.Mapper接口中方法的输入参数类型必须和sql定义的parameterType一致（不一定）
+ * 4.Mapper接口中方法的输出参数类型必须和sql定义的resultType一致
+ *
  * @author creator mafh 2019/11/28 17:56
  * @author updater
  * @version 1.0.0
@@ -77,5 +83,5 @@ public interface NovelMapper {
      * @param orderType 排序类型
      * @return 列表
      */
-    List<NovelVo> selectListByOrderType(@Param("orderType") Integer orderType);
+    List<NovelVo> selectListByOrderType(@Param("orderType") String orderType);
 }

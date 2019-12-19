@@ -14,7 +14,7 @@ public class Pageable {
     /**
      * 当前页
      */
-    private Integer pageNo = 0;
+    private Integer pageNo = 1;
 
     /**
      * 每页条数
@@ -28,7 +28,7 @@ public class Pageable {
     }
 
     public void setPageNo(Integer pageNo) {
-        this.pageNo = pageNo - 1;
+        this.pageNo = pageNo;
     }
 
     public Integer getPageSize() {
