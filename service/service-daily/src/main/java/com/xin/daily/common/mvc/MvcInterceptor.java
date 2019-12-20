@@ -90,6 +90,31 @@ public class MvcInterceptor extends BaseHandlerInterceptorAdapter implements IUr
     }
 
     /**
+     * This implementation is empty.
+     *
+     * @param request
+     * @param response
+     * @param handler
+     * @param ex
+     */
+    @Override
+    public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        super.afterCompletion(request, response, handler, ex);
+    }
+
+    /**
+     * This implementation is empty.
+     *
+     * @param request
+     * @param response
+     * @param handler
+     */
+    @Override
+    public void afterConcurrentHandlingStarted(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
+        super.afterConcurrentHandlingStarted(request, response, handler);
+    }
+
+    /**
      * 排除的规则
      */
     @Override

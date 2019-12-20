@@ -8,8 +8,10 @@ import com.xin.daily.entity.novel.Novel;
 import com.xin.daily.entity.novel.NovelChapter;
 import com.xin.daily.service.novel.INovelSpiderService;
 import com.xin.daily.service.novel.analyzer.NovelDocumentAnalyzer;
+import com.xin.daily.vo.NovelChapterVo;
 import com.xin.web.base.BaseService;
 import com.xin.web.pojo.Context;
+import com.xin.web.utils.crypt.SnowFlake;
 import com.xin.web.utils.jsoup.JsoupUtils;
 import com.xin.web.vo.UserVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,21 +65,22 @@ public class NovelSpiderServiceImpl extends BaseService implements INovelSpiderS
     @Override
     public Integer spiderNovelList(Context context, String novelCode) {
 
-        /*--------------------------------------------- 日志记录 -----------------------------------------------------*/
+        /*--------------------------------日志记录------------------------------------*/
         logger.debug("抓取小说列表，小说编号：{}", novelCode);
 
-        /*--------------------------------------------- 参数校验 -----------------------------------------------------*/
+        /*--------------------------------参数校验------------------------------------*/
         Assert.notNull(novelCode, "小说编号不能为空！");
         UserVo userVo = context.getUser();
         Integer results = 0;
         Date nowDate = new Date();
 
-        /*--------------------------------------------- 业务处理 -----------------------------------------------------*/
+        /*--------------------------------业务处理------------------------------------*/
         // 获取小说
         Novel novel = novelMapper.selectByNovelCode(novelCode);
         Assert.notNull(novel, "未查询到相关小说记录！");
         try {
             List<NovelChapter> novelChapterList = JsoupUtils.getDocumentList(novel.getUrl(), novelDocumentAnalyzer, NovelChapter.class);
+            SnowFlake snowFlake = new SnowFlake(3, 1);
             for (int i = 0; i < novelChapterList.size(); i++) {
                 NovelChapter novelChapter = novelChapterList.get(i);
                 // 获取章节地址
@@ -92,6 +95,8 @@ public class NovelSpiderServiceImpl extends BaseService implements INovelSpiderS
                     novelChapter.setContent("");
                     logger.error("解析html章节详情异常，错误：{}", e.getMessage());
                 }
+                String chapterCode = "ZJ" + snowFlake.nextId();
+                novelChapter.setChapterCode(chapterCode);
                 novelChapter.setNovelCode(novelCode);
                 novelChapter.setDisplayOrder(i);
                 novelChapter.setFlagDelete(CommonConst.FLAG_DELETE_NO);
@@ -112,10 +117,49 @@ public class NovelSpiderServiceImpl extends BaseService implements INovelSpiderS
             logger.error("解析html章节列表异常，错误：{}", e.getMessage());
         }
 
-        /*--------------------------------------------- 日志记录 -----------------------------------------------------*/
+        /*--------------------------------日志记录------------------------------------*/
         logger.debug("抓取小说列表结束，插入记录数：{}", results);
 
-        /*--------------------------------------------- 日志记录 -----------------------------------------------------*/
+        /*--------------------------------方法返回------------------------------------*/
         return results;
+    }
+
+    /**
+     * 完善小说内容
+     *
+     * @param context   上下文
+     * @param novelCode 小说编号
+     * @return 结果
+     */
+    @Override
+    public List<NovelChapterVo> improveNovel(Context context, String novelCode) {
+
+        /*--------------------------------日志记录------------------------------------*/
+        logger.debug("完善小说内容，小说编号：{}", novelCode);
+
+        /*--------------------------------参数校验------------------------------------*/
+        Assert.notNull(novelCode, "小说编号不能为空！");
+        boolean result = true;
+
+        /*--------------------------------业务处理------------------------------------*/
+        // 查询小说章节内容为空的记录
+        List<NovelChapterVo> novelChapterVoList = novelChapterMapper.selectListForEmptyByNovelCode(novelCode);
+        if (novelChapterVoList.size() > 0) {
+            // 循环抓取内容
+            for (NovelChapterVo novelChapterVo : novelChapterVoList) {
+                try {
+                    Map<String, Object> map = JsoupUtils.getDocumentMap(novelChapterVo.getUrl(), novelDocumentAnalyzer);
+                    novelChapterMapper.updateContentByChapterCode(novelChapterVo.getNovelCode(), map.get("content") + "");
+                } catch (Exception e) {
+                    logger.error("解析html章节详情异常，错误：{}", e.getMessage());
+                }
+            }
+        }
+
+        /*--------------------------------日志记录------------------------------------*/
+        logger.debug("完善小说内容，更新记录数：{}", novelChapterVoList.size());
+
+        /*--------------------------------方法返回------------------------------------*/
+        return novelChapterVoList;
     }
 }

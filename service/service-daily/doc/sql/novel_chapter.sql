@@ -25,6 +25,7 @@ CREATE TABLE `novel_chapter`
 (
     `id`            int(11)                                                       NOT NULL AUTO_INCREMENT,
     `novel_code`    varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL DEFAULT '' COMMENT '小说编号',
+    `chapter_code`  varchar(20) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL DEFAULT '' COMMENT '章节编号',
     `chapter_name`  varchar(50) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci  NOT NULL DEFAULT '' COMMENT '章节名称',
     `url`           varchar(200) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci NOT NULL DEFAULT '' COMMENT '章节地址',
     `content`       text CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci         NOT NULL COMMENT '章节内容',
@@ -44,3 +45,5 @@ CREATE TABLE `novel_chapter`
   ROW_FORMAT = Dynamic;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+alter table novel_chapter add column chapter_code VARCHAR(20) not null default '' COMMENT '章节编号' AFTER novel_code;

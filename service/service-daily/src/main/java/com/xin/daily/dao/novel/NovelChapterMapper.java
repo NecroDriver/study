@@ -1,7 +1,9 @@
 package com.xin.daily.dao.novel;
 
 import com.xin.daily.entity.novel.NovelChapter;
+import com.xin.daily.vo.NovelChapterVo;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -52,7 +54,14 @@ public interface NovelChapterMapper {
      */
     int updateByPrimaryKeySelective(NovelChapter record);
 
-    int updateByPrimaryKeyWithBLOBs(NovelChapter record);
+    /**
+     * 更新内容
+     *
+     * @param chapterCode 章节编号
+     * @param content     内容
+     * @return 结果
+     */
+    int updateContentByChapterCode(@Param("chapterCode") String chapterCode, @Param("content") String content);
 
     /**
      * update record selective
@@ -62,7 +71,6 @@ public interface NovelChapterMapper {
      */
     int updateByPrimaryKey(NovelChapter record);
 
-
     /**
      * 批量插入记录
      *
@@ -70,4 +78,12 @@ public interface NovelChapterMapper {
      * @return 插入数量
      */
     Integer batchInsert(List<NovelChapter> novelChapterList);
+
+    /**
+     * 根据小说编号查询内容为空的章节
+     *
+     * @param novelCode 小说编号
+     * @return 列表
+     */
+    List<NovelChapterVo> selectListForEmptyByNovelCode(String novelCode);
 }

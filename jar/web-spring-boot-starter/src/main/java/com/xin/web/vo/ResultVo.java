@@ -8,7 +8,7 @@ package com.xin.web.vo;
  * @author updater
  * @version 1.0.0
  */
-public class ResultVo<T> {
+public class ResultVo {
 
     /**
      * 结果
@@ -17,7 +17,7 @@ public class ResultVo<T> {
     /**
      * 数据
      */
-    private T data;
+    private Object data;
     /**
      * 展示信息
      */
@@ -28,12 +28,12 @@ public class ResultVo<T> {
         this.message = message;
     }
 
-    private ResultVo(Boolean result, T data) {
+    private ResultVo(Boolean result, Object data) {
         this.result = result;
         this.data = data;
     }
 
-    private ResultVo(Boolean result, T data, String message) {
+    private ResultVo(Boolean result, Object data, String message) {
         this.result = result;
         this.data = data;
         this.message = message;
@@ -47,8 +47,8 @@ public class ResultVo<T> {
      * @param message 信息
      * @return 对象
      */
-    public static ResultVo<Object> newResultVo(Boolean result, Object data, String message) {
-        return result ? new ResultVo<>(true, data, message + "成功！") : new ResultVo<>(false, data, message + "失败！");
+    public static ResultVo newResultVo(Boolean result, Object data, String message) {
+        return result ? new ResultVo(true, data, message + "成功！") : new ResultVo(false, data, message + "失败！");
     }
 
     /**
@@ -58,8 +58,8 @@ public class ResultVo<T> {
      * @param message 信息
      * @return 对象
      */
-    public static ResultVo<Object> newResultVo(Boolean result, String message) {
-        return result ? new ResultVo<>(true, message + "成功！") : new ResultVo<>(false, message + "失败！");
+    public static ResultVo newResultVo(Boolean result, String message) {
+        return result ? new ResultVo(true, message + "成功！") : new ResultVo(false, message + "失败！");
     }
 
     /**
@@ -68,8 +68,8 @@ public class ResultVo<T> {
      * @param data 数据
      * @return 对象
      */
-    public static ResultVo<Object> successVo(Object data) {
-        return new ResultVo<>(true, data);
+    public static ResultVo successVo(Object data) {
+        return new ResultVo(true, data);
     }
 
     /**
@@ -89,8 +89,8 @@ public class ResultVo<T> {
      * @param data    数据
      * @return 对象
      */
-    public static ResultVo<Object> failureVo(String message, Object data) {
-        return new ResultVo<>(false, data, message);
+    public static ResultVo failureVo(String message, Object data) {
+        return new ResultVo(false, data, message);
     }
 
     public Boolean getResult() {
@@ -101,11 +101,11 @@ public class ResultVo<T> {
         this.result = result;
     }
 
-    public T getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(T data) {
+    public void setData(Object data) {
         this.data = data;
     }
 

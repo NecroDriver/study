@@ -6,6 +6,7 @@
         <!--@Table study.novel_chapter-->
         <id column="id" jdbcType="INTEGER" property="id"/>
         <result column="novel_code" jdbcType="VARCHAR" property="novelCode"/>
+        <result column="chapter_code" jdbcType="VARCHAR" property="chapterCode"/>
         <result column="chapter_name" jdbcType="VARCHAR" property="chapterName"/>
         <result column="url" jdbcType="VARCHAR" property="url"/>
         <result column="display_order" jdbcType="INTEGER" property="displayOrder"/>
@@ -24,7 +25,7 @@
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, novel_code, chapter_name, url, display_order, flag_delete, create_time, creator,
+        id, novel_code, chapter_code, chapter_name, url, display_order, flag_delete, create_time, creator,
         creator_ip, modify_time, modifier, modifier_ip
     </sql>
     <sql id="Blob_Column_List">
@@ -48,14 +49,15 @@
     <insert id="insert" keyColumn="id" keyProperty="id" parameterType="com.xin.daily.entity.novel.NovelChapter"
             useGeneratedKeys="true">
         <!--@mbg.generated-->
-        insert into study.novel_chapter (novel_code, chapter_name, url,
+        insert into study.novel_chapter (novel_code, chapter_code, chapter_name, url,
         display_order, flag_delete, create_time,
         creator, creator_ip, modify_time,
         modifier, modifier_ip, content
         )
-        values (#{novelCode,jdbcType=VARCHAR}, #{chapterName,jdbcType=VARCHAR}, #{url,jdbcType=VARCHAR},
-        #{displayOrder,jdbcType=INTEGER}, #{flagDelete,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP},
-        #{creator,jdbcType=VARCHAR}, #{creatorIp,jdbcType=VARCHAR}, #{modifyTime,jdbcType=TIMESTAMP},
+        values (#{novelCode,jdbcType=VARCHAR}, #{chapterCode,jdbcType=VARCHAR}, #{chapterName,jdbcType=VARCHAR},
+        #{url,jdbcType=VARCHAR}, #{displayOrder,jdbcType=INTEGER}, #{flagDelete,jdbcType=TINYINT},
+        #{createTime,jdbcType=TIMESTAMP}, #{creator,jdbcType=VARCHAR}, #{creatorIp,jdbcType=VARCHAR},
+        #{modifyTime,jdbcType=TIMESTAMP},
         #{modifier,jdbcType=VARCHAR}, #{modifierIp,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR}
         )
     </insert>
@@ -66,6 +68,9 @@
         <trim prefix="(" suffix=")" suffixOverrides=",">
             <if test="novelCode != null">
                 novel_code,
+            </if>
+            <if test="chapterCode != null">
+                chapter_Code,
             </if>
             <if test="chapterName != null">
                 chapter_name,
@@ -104,6 +109,9 @@
         <trim prefix="values (" suffix=")" suffixOverrides=",">
             <if test="novelCode != null">
                 #{novelCode,jdbcType=VARCHAR},
+            </if>
+            <if test="chapterCode != null">
+                #{chapterCode,jdbcType=VARCHAR},
             </if>
             <if test="chapterName != null">
                 #{chapterName,jdbcType=VARCHAR},
@@ -147,6 +155,9 @@
             <if test="novelCode != null">
                 novel_code = #{novelCode,jdbcType=VARCHAR},
             </if>
+            <if test="chapterCode != null">
+                chapter_Code = #{chapterCode,jdbcType=VARCHAR},
+            </if>
             <if test="chapterName != null">
                 chapter_name = #{chapterName,jdbcType=VARCHAR},
             </if>
@@ -183,27 +194,16 @@
         </set>
         where id = #{id,jdbcType=INTEGER}
     </update>
-    <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.xin.daily.entity.novel.NovelChapter">
-        <!--@mbg.generated-->
+    <update id="updateContentByChapterCode">
         update study.novel_chapter
-        set novel_code = #{novelCode,jdbcType=VARCHAR},
-        chapter_name = #{chapterName,jdbcType=VARCHAR},
-        url = #{url,jdbcType=VARCHAR},
-        display_order = #{displayOrder,jdbcType=INTEGER},
-        flag_delete = #{flagDelete,jdbcType=TINYINT},
-        create_time = #{createTime,jdbcType=TIMESTAMP},
-        creator = #{creator,jdbcType=VARCHAR},
-        creator_ip = #{creatorIp,jdbcType=VARCHAR},
-        modify_time = #{modifyTime,jdbcType=TIMESTAMP},
-        modifier = #{modifier,jdbcType=VARCHAR},
-        modifier_ip = #{modifierIp,jdbcType=VARCHAR},
-        content = #{content,jdbcType=LONGVARCHAR}
-        where id = #{id,jdbcType=INTEGER}
+        set content = #{content,jdbcType=LONGVARCHAR}
+        where chapter_code = #{chapterCode,jdbcType=VARCHAR}
     </update>
     <update id="updateByPrimaryKey" parameterType="com.xin.daily.entity.novel.NovelChapter">
         <!--@mbg.generated-->
         update study.novel_chapter
         set novel_code = #{novelCode,jdbcType=VARCHAR},
+        chapter_code = #{chapterCode,jdbcType=VARCHAR},
         chapter_name = #{chapterName,jdbcType=VARCHAR},
         url = #{url,jdbcType=VARCHAR},
         display_order = #{displayOrder,jdbcType=INTEGER},
@@ -217,19 +217,30 @@
         where id = #{id,jdbcType=INTEGER}
     </update>
     <insert id="batchInsert" parameterType="java.util.List" useGeneratedKeys="false">
-        insert into study.novel_chapter (novel_code, chapter_name, url,
+        insert into study.novel_chapter (novel_code, chapter_code, chapter_name, url,
         display_order, flag_delete, create_time,
         creator, creator_ip, modify_time,
         modifier, modifier_ip, content
         )
         values
         <foreach collection="list" item="item" separator=",">
-            (#{item.novelCode,jdbcType=VARCHAR}, #{item.chapterName,jdbcType=VARCHAR}, #{item.url,jdbcType=VARCHAR},
-            #{item.displayOrder,jdbcType=INTEGER}, #{item.flagDelete,jdbcType=TINYINT},
-            #{item.createTime,jdbcType=TIMESTAMP},
+            (#{item.novelCode,jdbcType=VARCHAR},#{item.chapterCode,jdbcType=VARCHAR},
+            #{item.chapterName,jdbcType=VARCHAR}, #{item.url,jdbcType=VARCHAR}, #{item.displayOrder,jdbcType=INTEGER},
+            #{item.flagDelete,jdbcType=TINYINT}, #{item.createTime,jdbcType=TIMESTAMP},
             #{item.creator,jdbcType=VARCHAR}, #{item.creatorIp,jdbcType=VARCHAR}, #{item.modifyTime,jdbcType=TIMESTAMP},
             #{item.modifier,jdbcType=VARCHAR}, #{item.modifierIp,jdbcType=VARCHAR}, #{item.content,jdbcType=LONGVARCHAR}
             )
         </foreach>
     </insert>
+    <select id="selectListForEmptyByNovelCode" resultType="com.xin.daily.vo.NovelChapterVo">
+        select
+        novel_code,
+        chapter_code,
+        chapter_name,
+        display_order
+        from study.novel_chapter
+        where
+        novel_code = #{novelCode}
+        and content = ''
+    </select>
 </mapper>

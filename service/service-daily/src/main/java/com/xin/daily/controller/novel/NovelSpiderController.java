@@ -1,6 +1,7 @@
 package com.xin.daily.controller.novel;
 
 import com.xin.daily.service.novel.INovelSpiderService;
+import com.xin.daily.vo.NovelChapterVo;
 import com.xin.web.base.BaseController;
 import com.xin.web.pojo.Context;
 import com.xin.web.vo.ResultVo;
@@ -9,6 +10,8 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import java.util.List;
 
 /**
  * 小说爬取控制类
@@ -38,5 +41,18 @@ public class NovelSpiderController extends BaseController {
     public ResultVo spiderNovelList(Context context, @PathVariable String novelCode) {
         Integer num = novelSpiderService.spiderNovelList(context, novelCode);
         return ResultVo.newResultVo(num > 0, num, "抓取小说列表");
+    }
+
+    /**
+     * 完善小说内容
+     *
+     * @param context   上下文
+     * @param novelCode 小说编号
+     * @return 结果
+     */
+    @PostMapping("/spider/improve/{novelCode}")
+    public ResultVo improveNovel(Context context, @PathVariable String novelCode) {
+        List<NovelChapterVo> novelChapterVoList = novelSpiderService.improveNovel(context, novelCode);
+        return ResultVo.successVo(novelChapterVoList);
     }
 }

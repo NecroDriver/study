@@ -2,8 +2,10 @@ package com.xin.daily.entity.novel;
 
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
+
 import java.io.Serializable;
 import java.util.Date;
+
 import lombok.Data;
 
 /**
@@ -22,6 +24,12 @@ public class NovelChapter implements Serializable {
      */
     @ApiModelProperty(value = "小说编号")
     private String novelCode;
+
+    /**
+     * 章节编号
+     */
+    @ApiModelProperty(value = "章节编号")
+    private String chapterCode;
 
     /**
      * 章节名称
