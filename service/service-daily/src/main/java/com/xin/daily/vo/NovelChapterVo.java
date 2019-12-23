@@ -39,5 +39,10 @@ public class NovelChapterVo implements Serializable {
      * 章节内容
      */
     private String content;
+    /**
+     * 小说地址
+     */
+    private String novelUrl;
+
     private static final long serialVersionUID = 1L;
 }

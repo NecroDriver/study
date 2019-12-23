@@ -1,5 +1,6 @@
 package com.xin.daily.service.novel;
 
+import com.xin.daily.entity.novel.NovelChapter;
 import com.xin.daily.vo.NovelChapterVo;
 import com.xin.web.pojo.Context;
 
@@ -31,4 +32,13 @@ public interface INovelSpiderService {
      * @return 结果
      */
     List<NovelChapterVo> improveNovel(Context context, String novelCode);
+
+    /**
+     * 获取小说更新章节
+     *
+     * @param context   上下文
+     * @param novelCode 小说编号
+     * @return 结果
+     */
+    List<NovelChapter> updateNovel(Context context, String novelCode);
 }

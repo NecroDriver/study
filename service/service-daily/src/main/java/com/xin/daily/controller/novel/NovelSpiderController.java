@@ -1,5 +1,6 @@
 package com.xin.daily.controller.novel;
 
+import com.xin.daily.entity.novel.NovelChapter;
 import com.xin.daily.service.novel.INovelSpiderService;
 import com.xin.daily.vo.NovelChapterVo;
 import com.xin.web.base.BaseController;
@@ -53,6 +54,19 @@ public class NovelSpiderController extends BaseController {
     @PostMapping("/spider/improve/{novelCode}")
     public ResultVo improveNovel(Context context, @PathVariable String novelCode) {
         List<NovelChapterVo> novelChapterVoList = novelSpiderService.improveNovel(context, novelCode);
+        return ResultVo.successVo(novelChapterVoList);
+    }
+
+    /**
+     * 获取小说更新章节
+     *
+     * @param context   上下文
+     * @param novelCode 小说编号
+     * @return 结果
+     */
+    @PostMapping("/spider/update/{novelCode}")
+    public ResultVo updateNovel(Context context, @PathVariable String novelCode) {
+        List<NovelChapter> novelChapterVoList = novelSpiderService.updateNovel(context, novelCode);
         return ResultVo.successVo(novelChapterVoList);
     }
 }

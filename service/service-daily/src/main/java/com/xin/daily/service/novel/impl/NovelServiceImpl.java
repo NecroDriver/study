@@ -3,9 +3,12 @@ package com.xin.daily.service.novel.impl;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
 import com.xin.daily.common.consts.CommonConst;
+import com.xin.daily.dao.novel.NovelChapterMapper;
 import com.xin.daily.dao.novel.NovelMapper;
 import com.xin.daily.entity.novel.Novel;
+import com.xin.daily.entity.novel.NovelChapter;
 import com.xin.daily.service.novel.INovelService;
+import com.xin.daily.vo.NovelChapterVo;
 import com.xin.daily.vo.NovelVo;
 import com.xin.web.base.BaseService;
 import com.xin.web.pojo.Context;
@@ -36,6 +39,11 @@ public class NovelServiceImpl extends BaseService implements INovelService {
      */
     @Autowired
     private NovelMapper novelMapper;
+    /**
+     * 小说章节dao
+     */
+    @Autowired
+    private NovelChapterMapper novelChapterMapper;
 
     /**
      * 保存小说
@@ -119,5 +127,64 @@ public class NovelServiceImpl extends BaseService implements INovelService {
 
         /*--------------------------------方法返回------------------------------------*/
         return pageInfo;
+    }
+
+    /**
+     * 获取小说章节分页
+     *
+     * @param context   上下文
+     * @param novelCode 小说编号
+     * @param keyword   关键字
+     * @param orderType 排序类型
+     * @param pageable  分页对象
+     * @return 分页数据
+     */
+    @Override
+    public PageInfo<NovelChapterVo> getNovelChapterPage(Context context, String novelCode, String keyword, Integer orderType, Pageable pageable) {
+
+        /*--------------------------------日志记录------------------------------------*/
+        logger.debug("获取小说章节分页，小说编号：{}，关键字：{}", novelCode, keyword);
+
+        /*--------------------------------参数校验------------------------------------*/
+        Assert.notNull(novelCode, "小说编号不能为空！");
+        String orderTypeStr = orderType.equals(0) ? "asc" : "desc";
+        keyword = "%" + keyword + "%";
+
+        /*--------------------------------业务处理------------------------------------*/
+        PageHelper.startPage(pageable.getPageNo(), pageable.getPageSize());
+        List<NovelChapterVo> novelChapterVoList = novelChapterMapper.selectPageByNovelCode(novelCode, keyword, orderTypeStr);
+        PageInfo<NovelChapterVo> page = PageInfo.of(novelChapterVoList);
+
+        /*--------------------------------日志记录------------------------------------*/
+        logger.debug("获取小说章节分页，记录数：{}", page.getTotal());
+
+        /*--------------------------------方法返回------------------------------------*/
+        return page;
+    }
+
+    /**
+     * 根据章节编号获取章节详情
+     *
+     * @param context     上下文
+     * @param chapterCode 章节编号
+     * @return 详情
+     */
+    @Override
+    public NovelChapterVo getNovelChapterInfo(Context context, String chapterCode) {
+
+        /*--------------------------------日志记录------------------------------------*/
+        logger.debug("根据章节编号获取章节详情，章节编号：{}", chapterCode);
+
+        /*--------------------------------参数校验------------------------------------*/
+        Assert.notNull(chapterCode, "章节编号不能为空！");
+
+        /*--------------------------------业务处理------------------------------------*/
+        NovelChapterVo novelChapterVo = novelChapterMapper.selectByChapterCode(chapterCode);
+
+        /*--------------------------------日志记录------------------------------------*/
+        logger.debug("根据章节编号获取章节详情，结果：{}", novelChapterVo);
+
+        /*--------------------------------方法返回------------------------------------*/
+        return novelChapterVo;
     }
 }

@@ -25,21 +25,19 @@
     </resultMap>
     <sql id="Base_Column_List">
         <!--@mbg.generated-->
-        id, novel_code, chapter_code, chapter_name, url, display_order, flag_delete, create_time, creator,
-        creator_ip, modify_time, modifier, modifier_ip
+        id, novel_code, chapter_code, chapter_name, url, display_order
     </sql>
     <sql id="Blob_Column_List">
         <!--@mbg.generated-->
         content
     </sql>
-    <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="ResultMapWithBLOBs">
-        <!--@mbg.generated-->
+    <select id="selectByChapterCode" resultType="com.xin.daily.vo.NovelChapterVo">
         select
         <include refid="Base_Column_List"/>
         ,
         <include refid="Blob_Column_List"/>
         from study.novel_chapter
-        where id = #{id,jdbcType=INTEGER}
+        where chapter_code = #{chapterCode}
     </select>
     <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
         <!--@mbg.generated-->
@@ -237,10 +235,42 @@
         novel_code,
         chapter_code,
         chapter_name,
+        url,
         display_order
         from study.novel_chapter
         where
         novel_code = #{novelCode}
         and content = ''
+    </select>
+    <select id="selectMaxByNovelCode" resultType="com.xin.daily.vo.NovelChapterVo">
+        select
+        nc.novel_code
+        ,nc.chapter_code
+        ,nc.chapter_name
+        ,nc.url
+        ,nc.display_order
+        ,n.url as novelUrl
+        from study.novel_chapter nc
+        left join study.novel n on n.novel_code = nc.novel_code
+        where
+        nc.novel_code = #{novelCode}
+        order by nc.display_order desc
+        limit 1
+    </select>
+    <select id="selectPageByNovelCode" resultType="com.xin.daily.vo.NovelChapterVo">
+        select
+        nc.novel_code
+        ,nc.chapter_code
+        ,nc.chapter_name
+        ,nc.url
+        ,nc.display_order
+        from study.novel_chapter nc
+        where
+        nc.novel_code = #{novelCode}
+        <if test="keyword != null and keyword != ''">
+            and nc.chapter_name like #{keyword}
+        </if>
+        order by nc.display_order
+        <if test="orderTypeStr != null">${orderTypeStr}</if>
     </select>
 </mapper>

@@ -39,12 +39,12 @@ public interface NovelChapterMapper {
     int insertSelective(NovelChapter record);
 
     /**
-     * select by primary key
+     * 根据章节编号获取章节内容
      *
-     * @param id primary key
-     * @return object by primary key
+     * @param chapterCode 章节编号
+     * @return 结果
      */
-    NovelChapter selectByPrimaryKey(Integer id);
+    NovelChapterVo selectByChapterCode(String chapterCode);
 
     /**
      * update record
@@ -86,4 +86,22 @@ public interface NovelChapterMapper {
      * @return 列表
      */
     List<NovelChapterVo> selectListForEmptyByNovelCode(String novelCode);
+
+    /**
+     * 根据小说编号获取最新章节
+     *
+     * @param novelCode 小说编号
+     * @return 章节
+     */
+    NovelChapterVo selectMaxByNovelCode(String novelCode);
+
+    /**
+     * 查询小说章节列表
+     *
+     * @param novelCode    小说编号
+     * @param keyword      关键字
+     * @param orderTypeStr 排序
+     * @return 列表
+     */
+    List<NovelChapterVo> selectPageByNovelCode(@Param("novelCode") String novelCode, @Param("keyword") String keyword, @Param("orderTypeStr") String orderTypeStr);
 }

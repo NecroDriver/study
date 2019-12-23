@@ -11,6 +11,7 @@ import com.xin.daily.service.novel.analyzer.NovelDocumentAnalyzer;
 import com.xin.daily.vo.NovelChapterVo;
 import com.xin.web.base.BaseService;
 import com.xin.web.pojo.Context;
+import com.xin.web.utils.convert.ConvertUtils;
 import com.xin.web.utils.crypt.SnowFlake;
 import com.xin.web.utils.jsoup.JsoupUtils;
 import com.xin.web.vo.UserVo;
@@ -19,9 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.Assert;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * 小说抓取service实现类
@@ -149,7 +148,7 @@ public class NovelSpiderServiceImpl extends BaseService implements INovelSpiderS
             for (NovelChapterVo novelChapterVo : novelChapterVoList) {
                 try {
                     Map<String, Object> map = JsoupUtils.getDocumentMap(novelChapterVo.getUrl(), novelDocumentAnalyzer);
-                    novelChapterMapper.updateContentByChapterCode(novelChapterVo.getNovelCode(), map.get("content") + "");
+                    novelChapterMapper.updateContentByChapterCode(novelChapterVo.getChapterCode(), map.get("content") + "");
                 } catch (Exception e) {
                     logger.error("解析html章节详情异常，错误：{}", e.getMessage());
                 }
@@ -161,5 +160,69 @@ public class NovelSpiderServiceImpl extends BaseService implements INovelSpiderS
 
         /*--------------------------------方法返回------------------------------------*/
         return novelChapterVoList;
+    }
+
+    /**
+     * 获取小说更新章节
+     *
+     * @param context   上下文
+     * @param novelCode 小说编号
+     * @return 结果
+     */
+    @Override
+    public List<NovelChapter> updateNovel(Context context, String novelCode) {
+
+        /*--------------------------------日志记录------------------------------------*/
+        logger.debug("获取小说更新章节");
+
+        /*--------------------------------参数校验------------------------------------*/
+        UserVo userVo = context.getUser();
+        Date nowDate = new Date();
+        // 存放插入列表
+        List<NovelChapter> novelChapters = new ArrayList<>();
+
+        /*--------------------------------业务处理------------------------------------*/
+        // 获取最新章节
+        NovelChapterVo novelChapterVo = novelChapterMapper.selectMaxByNovelCode(novelCode);
+        Assert.notNull(novelChapterVo, "未查询到相关章节！");
+        int display_order = novelChapterVo.getDisplayOrder();
+        // 抓取章节列表
+        try {
+            List<NovelChapter> novelChapterList = JsoupUtils.getDocumentList(novelChapterVo.getNovelUrl(), novelDocumentAnalyzer, NovelChapter.class);
+            SnowFlake snowFlake = new SnowFlake(3, 2);
+            for (int i = novelChapterList.size() - 1; i >= 0; i++) {
+                // 倒序更新
+                NovelChapter novelChapter = novelChapterList.get(i);
+                if (novelChapter.getChapterName().equals(novelChapterVo.getChapterName())) {
+                    // 更新结束
+                    break;
+                }
+                // 生成实体
+                String chapterCode = "ZJ" + snowFlake.nextId();
+                novelChapter.setChapterCode(chapterCode);
+                novelChapter.setNovelCode(novelCode);
+                novelChapter.setDisplayOrder(++display_order);
+                novelChapter.setFlagDelete(CommonConst.FLAG_DELETE_NO);
+                novelChapter.setCreator(userVo.getUsername());
+                novelChapter.setCreatorIp(context.getRequest().getRemoteAddr());
+                novelChapter.setCreateTime(nowDate);
+                novelChapter.setModifier(userVo.getUsername());
+                novelChapter.setModifierIp(context.getRequest().getRemoteAddr());
+                novelChapter.setModifyTime(nowDate);
+                novelChapters.add(novelChapter);
+            }
+            // 倒序列表
+            Collections.reverse(novelChapters);
+            // 插入记录
+            novelChapterMapper.batchInsert(novelChapters);
+        } catch (Exception e) {
+            logger.error("获取章节列表失败！，错误：{}", e);
+        }
+
+        /*--------------------------------日志记录------------------------------------*/
+        logger.debug("获取小说更新章节，更新数量：{}", novelChapters.size());
+
+        /*--------------------------------方法返回------------------------------------*/
+        return novelChapters;
     }
 }
