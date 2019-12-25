@@ -6,7 +6,6 @@ import com.xin.daily.common.consts.CommonConst;
 import com.xin.daily.dao.novel.NovelChapterMapper;
 import com.xin.daily.dao.novel.NovelMapper;
 import com.xin.daily.entity.novel.Novel;
-import com.xin.daily.entity.novel.NovelChapter;
 import com.xin.daily.service.novel.INovelService;
 import com.xin.daily.vo.NovelChapterVo;
 import com.xin.daily.vo.NovelVo;
@@ -115,6 +114,7 @@ public class NovelServiceImpl extends BaseService implements INovelService {
         logger.debug("获取小说分页，排序类型：{}", orderType);
 
         /*--------------------------------参数校验------------------------------------*/
+        Assert.notNull(orderType, "排序类型不能为空！");
         String orderTypeStr = orderType.equals(0) ? "asc" : "desc";
 
         /*--------------------------------业务处理------------------------------------*/
@@ -147,6 +147,7 @@ public class NovelServiceImpl extends BaseService implements INovelService {
 
         /*--------------------------------参数校验------------------------------------*/
         Assert.notNull(novelCode, "小说编号不能为空！");
+        Assert.notNull(orderType, "排序类型不能为空！");
         String orderTypeStr = orderType.equals(0) ? "asc" : "desc";
         keyword = "%" + keyword + "%";
 

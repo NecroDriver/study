@@ -134,7 +134,7 @@ public class UserLoginServiceImpl extends BaseService implements IUserLoginServi
             userVo = ConvertUtils.convert(userLogin, UserVo.class);
             Assert.notNull(userVo.getAccount(), "用户信息转换错误！");
             // 存入redis，过期时间1小时
-            redisUtils.set(RedisConst.USER_LOGIN_KEY + token, JsonUtils.toJson(userVo), 3600);
+            redisUtils.set(RedisConst.USER_LOGIN_KEY + token, JsonUtils.toJson(userVo), 3600 * 24);
             // 添加写 cookie 的逻辑，cookie 的有效期是关闭浏览器就失效。
             CookieUtils.setCookie(context.getRequest(), context.getResponse(), CookieConst.USER_TOKEN, token);
         } else {
