@@ -23,7 +23,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
             <exclusions>
-<!--                去除原本的日志jar包-->
+                <!--去除原本的日志jar包-->
                 <exclusion>
                     <groupId>org.springframework.boot</groupId>
                     <artifactId>spring-boot-starter-logging</artifactId>
@@ -42,11 +42,22 @@
             <groupId>org.springframework.data</groupId>
             <artifactId>spring-data-commons</artifactId>
         </dependency>
+        <!--springBoot的aop-->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-aop</artifactId>
+        </dependency>
         <!-- https://mvnrepository.com/artifact/org.jsoup/jsoup -->
         <dependency>
             <groupId>org.jsoup</groupId>
             <artifactId>jsoup</artifactId>
             <version>1.12.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.xin</groupId>
+            <artifactId>redis-spring-boot-starter</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
